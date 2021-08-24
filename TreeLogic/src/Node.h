@@ -5,25 +5,22 @@
 
 #include "INode.h"
 #include "TreeIterator.h"
-#include "IAddingStrategy.h"
 
+
+
+template <typename T>
+class IAddingStrategy;
 
 template <typename T>
 class Node : public INode<T>
 {
-private:
-
-	static RandomAddingStrategyRegularTree<T> m_default_adding_strategy;
-
 protected:
-
-	static IAddingStrategyRegularTree<T>* m_adding_strategy;
 
 	std::vector<INode<T>*> m_sons;
 
 public:
 
-	Node(const uint32_t& id, const T& data);
+	Node(const uint32_t& id, const T& data, IAddingStrategy<T>* adding_strat);
 
 	void add(INode<T>* to_add);
 
@@ -43,25 +40,23 @@ public:
 
 	void print(const std::string& prefix);
 
-	static void setAddingStrategy(IAddingStrategyRegularTree<T>* adding_strategy) { m_adding_strategy = adding_strategy; }
+	void setAddingStrategy(IAddingStrategy<T>* adding_strategy);
 };
 
-template <typename T>
-RandomAddingStrategyRegularTree<T> Node<T>::m_default_adding_strategy = RandomAddingStrategyRegularTree<T>(0.25f);
+#include "IAddingStrategy.h"
 
 template <typename T>
-IAddingStrategyRegularTree<T>* Node<T>::m_adding_strategy = &m_default_adding_strategy;
-
-template <typename T>
-Node<T>::Node(const uint32_t& id, const T& data)
-	: INode<T>(id, data)
+Node<T>::Node(const uint32_t& id, const T& data, IAddingStrategy<T>* adding_strat)
 {
+	this->m_id = id;
+	this->m_data = data;
+	this->m_adding_strategy = adding_strat;
 }
 
 template<typename T>
 void Node<T>::add(INode<T>* to_add)
 {
-	m_adding_strategy->add(this, to_add);
+	this->m_adding_strategy->add(this, to_add);
 }
 
 template <typename T>
@@ -117,6 +112,15 @@ void Node<T>::print(const std::string& prefix)
 	std::cout << prefix << this->m_id << std::endl;
 	for (auto& son : m_sons) {
 		son->print("  " + prefix);
+	}
+}
+
+template<typename T>
+void Node<T>::setAddingStrategy(IAddingStrategy<T>* adding_strategy)
+{
+	this->m_adding_strategy = adding_strategy;
+	for (auto& son : m_sons) {
+		son->setAddingStrategy(adding_strategy);
 	}
 }
 

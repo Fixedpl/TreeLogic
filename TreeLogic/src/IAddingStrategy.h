@@ -1,44 +1,44 @@
 #pragma once
 #include <cstdlib>
 #include <ctime>
+#include <cstdint>
 
-typedef unsigned int uint32_t;
 
-template <typename T>
-class Node;
 
 template <typename T>
 class INode;
 
 template <typename T>
-class IAddingStrategyRegularTree
+class IAddingStrategy
 {
 public:
 
-	virtual void add(Node<T>* root, INode<T>* to_add) = 0;
+	virtual void add(INode<T>* root, INode<T>* to_add) = 0;
 
 };
 
 template <typename T>
-class RandomAddingStrategyRegularTree : public IAddingStrategyRegularTree<T>
+class RandomAddingStrategyRegularTree : public IAddingStrategy<T>
 {
 private:
-
+	// [0, 1]
 	float m_chance_of_adding_to_current_node;
 
 public:
 
-	RandomAddingStrategyRegularTree(float chance_of_adding_to_current_node)
+	RandomAddingStrategyRegularTree(const float& chance_of_adding_to_current_node)
 		:	m_chance_of_adding_to_current_node(chance_of_adding_to_current_node)
 	{
 		srand(time(0));
 	}
 
-	void add(Node<T>* root, INode<T>* to_add);
+	void add(INode<T>* root, INode<T>* to_add);
+
+	void setChanceOfAddingToCurrentNode(const float& chance_of_adding_to_current_node);
 };
 
 template <typename T>
-class BalancedAddingStrategyRegularTree : public IAddingStrategyRegularTree<T>
+class BalancedAddingStrategyRegularTree : public IAddingStrategy<T>
 {
 private:
 
@@ -46,26 +46,28 @@ private:
 
 public:
 
-	BalancedAddingStrategyRegularTree(uint32_t max_sons_per_node)
+	BalancedAddingStrategyRegularTree(const uint32_t& max_sons_per_node)
 		: m_max_sons_per_node(max_sons_per_node)
 	{
-		srand(time(0));
 	}
 
-	void add(Node<T>* root, INode<T>* to_add);
+	void add(INode<T>* root, INode<T>* to_add);
+
+	void setMaxSonsPerNode(const uint32_t& max_sons_per_node);
 };
 
+#include "INode.h"
 #include "Node.h"
 
 template<typename T>
-void RandomAddingStrategyRegularTree<T>::add(Node<T>* root, INode<T>* to_add)
+void RandomAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 {
 	float random_number = rand() / (float)(RAND_MAX);
 	if (random_number <= m_chance_of_adding_to_current_node || root->sonsCount() == 0) {
-		root->addSonPtr(to_add);
+		((Node<T>*)root)->addSonPtr(to_add);
 	}
 	else {
-		std::vector<INode<T>*> sons = root->getSons();
+		std::vector<INode<T>*> sons = ((Node<T>*)root)->getSons();
 		int max = sons.size() - 1;
 		int winner = rand() % (max + 1);
 		sons[winner]->add(to_add);
@@ -73,17 +75,30 @@ void RandomAddingStrategyRegularTree<T>::add(Node<T>* root, INode<T>* to_add)
 }
 
 template<typename T>
-void BalancedAddingStrategyRegularTree<T>::add(Node<T>* root, INode<T>* to_add)
+void RandomAddingStrategyRegularTree<T>::setChanceOfAddingToCurrentNode(const float& chance_of_adding_to_current_node)
+{
+	m_chance_of_adding_to_current_node = chance_of_adding_to_current_node;
+}
+
+template<typename T>
+void BalancedAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 {
 	if (root->sonsCount() < m_max_sons_per_node) {
-		root->addSonPtr(to_add);
+		Node<T>* test = (Node<T>*)root;
+		test->addSonPtr(to_add);
 	}
 	else {
-		INode<T>* smallest_subtree_node = root->getSons()[0];
-		for (auto& node : root->getSons()) {
-			if (node->subtreeCount() < smallest_subtree_node->subtreeCount())
+		INode<T>* smallest_subtree_node = ((Node<T>*)root)->getSons()[0];
+		for (auto& node : ((Node<T>*)root)->getSons()) {
+			if (node->subtreeNodeCount() < smallest_subtree_node->subtreeNodeCount())
 				smallest_subtree_node = node;
 		}
 		smallest_subtree_node->add(to_add);
 	}
+}
+
+template<typename T>
+void BalancedAddingStrategyRegularTree<T>::setMaxSonsPerNode(const uint32_t& max_sons_per_node)
+{
+	m_max_sons_per_node = max_sons_per_node;
 }

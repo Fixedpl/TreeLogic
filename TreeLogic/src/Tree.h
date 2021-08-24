@@ -2,14 +2,27 @@
 #include <iostream>
 
 #include "ITree.h"
-#include "Node.h"
+
 #include "TreeIterator.h"
+#include "IAddingStrategy.h"
+
+template <typename T>
+class INode;
 
 template <typename T>
 class Tree : public ITree<T>
 {
+private:
+
+	RandomAddingStrategyRegularTree<T> m_default_adding_strategy;
+
+	IAddingStrategy<T>* m_current_adding_strategy;
 
 public:
+
+	Tree() 
+		: m_default_adding_strategy(0.25f),
+		  m_current_adding_strategy(&m_default_adding_strategy) {}
 
 	INode<T>* add(const T& data);
 
@@ -22,13 +35,17 @@ public:
 	void swapData(INode<T>* first_node, INode<T>* second_node);
 
 	void printToConsole();
+
+	void setAddingStrategy(IAddingStrategy<T>* adding_strategy);
 };
 
+#include "INode.h"
+#include "Node.h"
 
 template <typename T>
 INode<T>* Tree<T>::add(const T& data) {
 
-	INode<T>* newNode = new Node<T>(this->m_id_handler.pullId(), data);
+	INode<T>* newNode = new Node<T>(this->m_id_handler.pullId(), data, m_current_adding_strategy);
 
 	if (this->m_root_node == nullptr) {
 		this->m_root_node = newNode;
@@ -94,6 +111,7 @@ template<typename T>
 void Tree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
 {
 	T buffor = first_node->getData();
+
 	first_node->setData(second_node->getData());
 	second_node->setData(buffor);
 }
@@ -101,12 +119,21 @@ void Tree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
 template<typename T>
 void Tree<T>::printToConsole()
 {
-	Node<T>* root_node = (Node<T>*) this->m_root_node;
-	if (root_node != nullptr) {
+	if (this->m_root_node != nullptr) {
+		Node<T>* root_node = (Node<T>*) this->m_root_node;
+
 		std::cout << root_node->getId() << std::endl;
 		for (auto& son : root_node->getSons()) {
 			son->print("  |-");
 		}
 	}
+}
+
+template<typename T>
+void Tree<T>::setAddingStrategy(IAddingStrategy<T>* adding_strategy)
+{
+	m_current_adding_strategy = adding_strategy;
+	if(this->m_root_node != nullptr)
+		this->m_root_node->setAddingStrategy(adding_strategy);
 }
 

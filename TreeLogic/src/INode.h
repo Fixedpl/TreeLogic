@@ -6,6 +6,10 @@
 
 
 template <typename T>
+class IAddingStrategy;
+
+
+template <typename T>
 class INode
 {
 protected:
@@ -14,16 +18,11 @@ protected:
 
 	T m_data;
 
+	IAddingStrategy<T>* m_adding_strategy;
+
 public:
 
 	INode<T>* m_father = nullptr;
-
-protected:
-
-	INode(const uint32_t& id, const T& data)
-		: m_id(id),
-		  m_data(data)
-	{}
 
 public:
 
@@ -46,5 +45,7 @@ public:
 	void setData(const T& data) { m_data = data; }
 
 	virtual void print(const std::string& prefix) = 0;
-};
 
+	virtual void setAddingStrategy(IAddingStrategy<T>* adding_strategy) = 0;
+
+};
