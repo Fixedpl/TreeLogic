@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 #include <vector>
+#include <cstdint>
 
 #include "INode.h"
 #include "TreeIterator.h"
@@ -21,7 +23,7 @@ protected:
 
 public:
 
-	Node(const T& data);
+	Node(const uint32_t& id, const T& data);
 
 	void add(INode<T>* to_add);
 
@@ -39,19 +41,21 @@ public:
 
 	std::vector<INode<T>*> getSons() { return m_sons; }
 
+	void print(const std::string& prefix);
+
 	static void setAddingStrategy(IAddingStrategyRegularTree<T>* adding_strategy) { m_adding_strategy = adding_strategy; }
 };
 
 template <typename T>
-RandomAddingStrategyRegularTree<T> Node<T>::m_default_adding_strategy = RandomAddingStrategyRegularTree<T>(0.35f);
+RandomAddingStrategyRegularTree<T> Node<T>::m_default_adding_strategy = RandomAddingStrategyRegularTree<T>(0.25f);
 
 template <typename T>
 IAddingStrategyRegularTree<T>* Node<T>::m_adding_strategy = &m_default_adding_strategy;
 
 template <typename T>
-Node<T>::Node(const T& data)
+Node<T>::Node(const uint32_t& id, const T& data)
+	: INode<T>(id, data)
 {
-	this->m_data = data;
 }
 
 template<typename T>
@@ -105,6 +109,15 @@ uint32_t Node<T>::subtreeNodeCount()
 		count += node->subtreeNodeCount() + 1;
 	}
 	return count;
+}
+
+template<typename T>
+void Node<T>::print(const std::string& prefix)
+{
+	std::cout << prefix << this->m_id << std::endl;
+	for (auto& son : m_sons) {
+		son->print("  " + prefix);
+	}
 }
 
 

@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\IDHandler.cpp" />
     <ClCompile Include="src\IAddingStrategy.cpp" />
     <ClCompile Include="src\Iterator.cpp" />
     <ClCompile Include="src\Node.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="src\TreeIterator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\IDHandler.h" />
     <ClInclude Include="src\IAddingStrategy.h" />
     <ClInclude Include="src\Iterator.h" />
     <ClInclude Include="src\Node.h" />

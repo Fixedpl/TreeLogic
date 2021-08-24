@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 
 #include "ITree.h"
@@ -20,22 +20,21 @@ public:
 	void swapNodes(INode<T>* first_node, INode<T>* second_node);
 
 	void swapData(INode<T>* first_node, INode<T>* second_node);
+
+	void printToConsole();
 };
 
 
 template <typename T>
 INode<T>* Tree<T>::add(const T& data) {
 
-	INode<T>* newNode = new Node<T>(data);
+	INode<T>* newNode = new Node<T>(this->m_id_handler.pullId(), data);
 
 	if (this->m_root_node == nullptr) {
 		this->m_root_node = newNode;
 	}
 	else {
-		// TODO: Use dynamic_cast
-		Node<T>* root_node_downcast = (Node<T>*) this->m_root_node;
-
-		root_node_downcast->addSonPtr(newNode);
+		this->m_root_node->add(newNode);
 	}
 
 	return newNode;
@@ -43,6 +42,9 @@ INode<T>* Tree<T>::add(const T& data) {
 
 template <typename T>
 void Tree<T>::remove(INode<T>* node) {
+
+	this->m_id_handler.pushId(node->getId());
+
 	node->remove();
 
 	if (node->m_father != nullptr) {
@@ -94,5 +96,17 @@ void Tree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
 	T buffor = first_node->getData();
 	first_node->setData(second_node->getData());
 	second_node->setData(buffor);
+}
+
+template<typename T>
+void Tree<T>::printToConsole()
+{
+	Node<T>* root_node = (Node<T>*) this->m_root_node;
+	if (root_node != nullptr) {
+		std::cout << root_node->getId() << std::endl;
+		for (auto& son : root_node->getSons()) {
+			son->print("  |-");
+		}
+	}
 }
 

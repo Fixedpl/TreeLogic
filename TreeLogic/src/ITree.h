@@ -1,6 +1,7 @@
 #pragma once
 #include "INode.h"
 #include "Iterator.h"
+#include "IDHandler.h"
 
 template <typename T>
 class ITree
@@ -8,6 +9,8 @@ class ITree
 protected:
 
 	INode<T>* m_root_node = nullptr;
+
+	IDHandler m_id_handler;
 
 public:
 
@@ -22,5 +25,7 @@ public:
 	virtual void swapNodes(INode<T>* first_node, INode<T>* second_node) = 0;
 
 	virtual void swapData(INode<T>* first_node, INode<T>* second_node) = 0;
+
+	virtual void printToConsole() = 0;
 };
 

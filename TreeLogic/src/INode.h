@@ -1,23 +1,29 @@
 #pragma once
+#include <cstdint>
+#include <string>
+
 #include "TreeIterator.h"
+
 
 template <typename T>
 class INode
 {
 protected:
 
+	uint32_t m_id;
+
 	T m_data;
 
 public:
 
-	INode<T>* m_father;
+	INode<T>* m_father = nullptr;
 
 protected:
 
-	INode()
-		: m_father(nullptr)
-	{
-	}
+	INode(const uint32_t& id, const T& data)
+		: m_id(id),
+		  m_data(data)
+	{}
 
 public:
 
@@ -33,9 +39,12 @@ public:
 
 	virtual uint32_t subtreeNodeCount() = 0;
 
+	inline uint32_t getId() { return m_id; }
+
 	inline T getData() { return m_data; }
 
 	void setData(const T& data) { m_data = data; }
 
+	virtual void print(const std::string& prefix) = 0;
 };
 
