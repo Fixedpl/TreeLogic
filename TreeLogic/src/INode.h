@@ -1,19 +1,12 @@
 #pragma once
 #include "TreeIterator.h"
-#include "IAddingStrategy.h"
 
 template <typename T>
 class INode
 {
-private:
-
-	static RandomAddingStrategy m_default;
-
 protected:
 
 	T m_data;
-
-	static IAddingStrategy* m_adding_strategy;
 
 public:
 
@@ -21,15 +14,16 @@ public:
 
 protected:
 
-	INode() {
-		m_adding_strategy = &m_default;
+	INode()
+		: m_father(nullptr)
+	{
 	}
 
 public:
 
 	virtual ~INode() {}
 
-	virtual void add() = 0;
+	virtual void add(INode<T>* to_add) = 0;
 
 	virtual void remove() = 0;
 
@@ -43,6 +37,5 @@ public:
 
 	void setData(const T& data) { m_data = data; }
 
-	static void setAddingStrategy(IAddingStrategy* adding_strategy) { m_adding_strategy = adding_strategy; }
 };
 

@@ -3,12 +3,19 @@
 
 #include "INode.h"
 #include "TreeIterator.h"
+#include "IAddingStrategy.h"
 
 
 template <typename T>
 class Node : public INode<T>
 {
+private:
+
+	static RandomAddingStrategyRegularTree<T> m_default_adding_strategy;
+
 protected:
+
+	static IAddingStrategyRegularTree<T>* m_adding_strategy;
 
 	std::vector<INode<T>*> m_sons;
 
@@ -16,7 +23,7 @@ public:
 
 	Node(const T& data);
 
-	void add();
+	void add(INode<T>* to_add);
 
 	void addSonPtr(INode<T>* node);
 
@@ -29,7 +36,17 @@ public:
 	uint32_t sonsCount();
 
 	uint32_t subtreeNodeCount();
+
+	std::vector<INode<T>*> getSons() { return m_sons; }
+
+	static void setAddingStrategy(IAddingStrategyRegularTree<T>* adding_strategy) { m_adding_strategy = adding_strategy; }
 };
+
+template <typename T>
+RandomAddingStrategyRegularTree<T> Node<T>::m_default_adding_strategy = RandomAddingStrategyRegularTree<T>(0.35f);
+
+template <typename T>
+IAddingStrategyRegularTree<T>* Node<T>::m_adding_strategy = &m_default_adding_strategy;
 
 template <typename T>
 Node<T>::Node(const T& data)
@@ -38,11 +55,10 @@ Node<T>::Node(const T& data)
 }
 
 template<typename T>
-void Node<T>::add()
+void Node<T>::add(INode<T>* to_add)
 {
-	this->m_adding_strategy;
+	m_adding_strategy->add(this, to_add);
 }
-
 
 template <typename T>
 void Node<T>::addSonPtr(INode<T>* node) {

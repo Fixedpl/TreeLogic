@@ -5,7 +5,8 @@
 int main()
 {
     ITree<std::string>* regularTree = new Tree<std::string>();
-    regularTree->add("Pierwszy node");
+    INode<std::string>* root = regularTree->add("Pierwszy node");
+    regularTree->add("Drugi node");
     std::cin;
 }
 
