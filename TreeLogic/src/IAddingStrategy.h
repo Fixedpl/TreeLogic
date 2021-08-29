@@ -70,7 +70,7 @@ void RandomAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 		std::vector<INode<T>*> sons = ((Node<T>*)root)->getSons();
 		int max = sons.size() - 1;
 		int winner = rand() % (max + 1);
-		sons[winner]->add(to_add);
+		add(sons[winner], to_add);
 	}
 }
 
@@ -84,8 +84,7 @@ template<typename T>
 void BalancedAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 {
 	if (root->sonsCount() < m_max_sons_per_node) {
-		Node<T>* test = (Node<T>*)root;
-		test->addSonPtr(to_add);
+		((Node<T>*)root)->addSonPtr(to_add);
 	}
 	else {
 		INode<T>* smallest_subtree_node = ((Node<T>*)root)->getSons()[0];
@@ -93,7 +92,7 @@ void BalancedAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 			if (node->subtreeNodeCount() < smallest_subtree_node->subtreeNodeCount())
 				smallest_subtree_node = node;
 		}
-		smallest_subtree_node->add(to_add);
+		add(smallest_subtree_node, to_add);
 	}
 }
 

@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ITraversalStrategy.cpp" />
     <ClCompile Include="src\IDHandler.cpp" />
     <ClCompile Include="src\IAddingStrategy.cpp" />
     <ClCompile Include="src\Iterator.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="src\TreeIterator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ITraversalStrategy.h" />
     <ClInclude Include="src\IDHandler.h" />
     <ClInclude Include="src\IAddingStrategy.h" />
     <ClInclude Include="src\Iterator.h" />
@@ -158,6 +160,9 @@
     <ClInclude Include="src\ITree.h" />
     <ClInclude Include="src\Tree.h" />
     <ClInclude Include="src\TreeIterator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\notes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,6 +5,7 @@
 
 #include "TreeIterator.h"
 #include "IAddingStrategy.h"
+#include "ITraversalStrategy.h"
 
 template <typename T>
 class INode;
@@ -16,7 +17,7 @@ private:
 
 	RandomAddingStrategyRegularTree<T> m_default_adding_strategy;
 
-	IAddingStrategy<T>* m_current_adding_strategy;
+	PreOrderTraversal<T> m_default_traversing_strategy;
 
 public:
 
@@ -28,7 +29,7 @@ public:
 
 	void remove(INode<T>* node);
 
-	Iterator<INode<T>*>* search(const T& data);
+	Iterator<INode<T>*> search(const T& data);
 
 	void swapNodes(INode<T>* first_node, INode<T>* second_node);
 
@@ -76,15 +77,13 @@ void Tree<T>::remove(INode<T>* node) {
 }
 
 template<typename T>
-Iterator<INode<T>*>* Tree<T>::search(const T& data) {
-	TreeIterator<INode<T>*>* treeIterator = new TreeIterator<INode<T>*>();
+Iterator<INode<T>*> Tree<T>::search(const T& data) {
+	TreeIterator<INode<T>*> treeIterator;
 
-	if (this->m_root_node->getData() == data)
-		treeIterator->add(this->m_root_node);
+	if(this->m_root_node != nullptr)
+		this->m_root_node->search(data, treeIterator);
 
-	this->m_root_node->search(data, treeIterator);
-
-	return treeIterator;
+	return (Iterator<INode<T>*>)treeIterator;
 }
 
 template<typename T>

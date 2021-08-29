@@ -30,13 +30,13 @@ public:
 
 	void removeSonPtr(INode<T>* node);
 
-	void search(const T& data, TreeIterator<INode<T>*>* treeIterator);
+	void search(const T& data, const TreeIterator<INode<T>*>& treeIterator);
 
 	uint32_t sonsCount();
 
 	uint32_t subtreeNodeCount();
 
-	std::vector<INode<T>*> getSons() { return m_sons; }
+	Iterator<INode<T>*>* getSons();
 
 	void print(const std::string& prefix);
 
@@ -80,14 +80,13 @@ void Node<T>::removeSonPtr(INode<T>* node)
 }
 
 template<typename T>
-void Node<T>::search(const T& data, TreeIterator<INode<T>*>* treeIterator)
+void Node<T>::search(const T& data, const TreeIterator<INode<T>*>& treeIterator)
 {
 	if (this->m_data == data)
 		treeIterator->add(this);
 
-	for (auto& node : m_sons) {
+	for (auto& node : m_sons)
 		node->search(data, treeIterator);
-	}
 }
 
 template<typename T>
@@ -104,6 +103,18 @@ uint32_t Node<T>::subtreeNodeCount()
 		count += node->subtreeNodeCount() + 1;
 	}
 	return count;
+}
+
+template<typename T>
+Iterator<INode<T>*>* Node<T>::getSons()
+{
+	TreeIterator<INode<T>*>* tree_iterator = new TreeIterator<INode<T>*>();
+	
+	for (auto& son : m_sons) {
+		tree_iterator->add(son);
+	}
+
+	return tree_iterator;
 }
 
 template<typename T>

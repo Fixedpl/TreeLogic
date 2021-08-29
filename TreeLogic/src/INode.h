@@ -8,6 +8,9 @@
 template <typename T>
 class IAddingStrategy;
 
+template <typename T>
+class Iterator;
+
 
 template <typename T>
 class INode
@@ -32,7 +35,9 @@ public:
 
 	virtual void remove() = 0;
 
-	virtual void search(const T& data, TreeIterator<INode<T>*>* treeIterator) = 0;
+	virtual void search(const T& data, const TreeIterator<INode<T>*>& treeIterator) = 0;
+
+	virtual Iterator<INode<T>*>* getSons() = 0;
 
 	virtual uint32_t sonsCount() = 0;
 

@@ -6,6 +6,9 @@ template <typename T>
 class IAddingStrategy;
 
 template <typename T>
+class ITraversalStrategy;
+
+template <typename T>
 class INode;
 
 template <typename T>
@@ -17,6 +20,10 @@ protected:
 
 	IDHandler m_id_handler;
 
+	IAddingStrategy<T>* m_current_adding_strategy;
+
+	ITraversalStrategy<T>* m_current_traversing_strategy;
+
 public:
 
 	virtual ~ITree() {}
@@ -25,7 +32,7 @@ public:
 
 	virtual void remove(INode<T>* node) = 0;
 
-	virtual Iterator<INode<T>*>* search(const T& data) = 0;
+	virtual Iterator<INode<T>*> search(const T& data) = 0;
 
 	virtual void swapNodes(INode<T>* first_node, INode<T>* second_node) = 0;
 
