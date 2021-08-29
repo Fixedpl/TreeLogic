@@ -20,43 +20,31 @@ protected:
 
 public:
 
-	Node(const uint32_t& id, const T& data, IAddingStrategy<T>* adding_strat);
-
-	void add(INode<T>* to_add);
+	Node(const uint32_t& id, const T& data);
 
 	void addSonPtr(INode<T>* node);
 
-	void remove();
-
 	void removeSonPtr(INode<T>* node);
 
-	void search(const T& data, TreeIterator<INode<T>*>* treeIterator);
+	void remove();
 
 	uint32_t sonsCount();
 
 	uint32_t subtreeNodeCount();
 
-	std::vector<INode<T>*> getSons() { return m_sons; }
+	std::vector<INode<T>*> getSons();
 
 	void print(const std::string& prefix);
 
-	void setAddingStrategy(IAddingStrategy<T>* adding_strategy);
 };
 
 #include "IAddingStrategy.h"
 
 template <typename T>
-Node<T>::Node(const uint32_t& id, const T& data, IAddingStrategy<T>* adding_strat)
+Node<T>::Node(const uint32_t& id, const T& data)
 {
 	this->m_id = id;
 	this->m_data = data;
-	this->m_adding_strategy = adding_strat;
-}
-
-template<typename T>
-void Node<T>::add(INode<T>* to_add)
-{
-	this->m_adding_strategy->add(this, to_add);
 }
 
 template <typename T>
@@ -80,17 +68,6 @@ void Node<T>::removeSonPtr(INode<T>* node)
 }
 
 template<typename T>
-void Node<T>::search(const T& data, TreeIterator<INode<T>*>* treeIterator)
-{
-	if (this->m_data == data)
-		treeIterator->add(this);
-
-	for (auto& node : m_sons) {
-		node->search(data, treeIterator);
-	}
-}
-
-template<typename T>
 uint32_t Node<T>::sonsCount()
 {
 	return m_sons.size();
@@ -107,6 +84,12 @@ uint32_t Node<T>::subtreeNodeCount()
 }
 
 template<typename T>
+std::vector<INode<T>*> Node<T>::getSons()
+{
+	return m_sons;
+}
+
+template<typename T>
 void Node<T>::print(const std::string& prefix)
 {
 	std::cout << prefix << this->m_id << std::endl;
@@ -114,14 +97,4 @@ void Node<T>::print(const std::string& prefix)
 		son->print("  " + prefix);
 	}
 }
-
-template<typename T>
-void Node<T>::setAddingStrategy(IAddingStrategy<T>* adding_strategy)
-{
-	this->m_adding_strategy = adding_strategy;
-	for (auto& son : m_sons) {
-		son->setAddingStrategy(adding_strategy);
-	}
-}
-
 

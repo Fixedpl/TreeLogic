@@ -1,12 +1,16 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "TreeIterator.h"
 
 
 template <typename T>
 class IAddingStrategy;
+
+template <typename T>
+class Iterator;
 
 
 template <typename T>
@@ -18,8 +22,6 @@ protected:
 
 	T m_data;
 
-	IAddingStrategy<T>* m_adding_strategy;
-
 public:
 
 	INode<T>* m_father = nullptr;
@@ -28,11 +30,9 @@ public:
 
 	virtual ~INode() {}
 
-	virtual void add(INode<T>* to_add) = 0;
-
 	virtual void remove() = 0;
 
-	virtual void search(const T& data, TreeIterator<INode<T>*>* treeIterator) = 0;
+	virtual std::vector<INode<T>*> getSons() = 0;
 
 	virtual uint32_t sonsCount() = 0;
 
@@ -45,7 +45,5 @@ public:
 	void setData(const T& data) { m_data = data; }
 
 	virtual void print(const std::string& prefix) = 0;
-
-	virtual void setAddingStrategy(IAddingStrategy<T>* adding_strategy) = 0;
 
 };

@@ -5,6 +5,7 @@
 
 #include "TreeIterator.h"
 #include "IAddingStrategy.h"
+#include "ITraversalStrategy.h"
 
 template <typename T>
 class INode;
@@ -16,13 +17,16 @@ private:
 
 	RandomAddingStrategyRegularTree<T> m_default_adding_strategy;
 
-	IAddingStrategy<T>* m_current_adding_strategy;
+	PreOrderTraversal<T> m_default_traversing_strategy;
 
 public:
 
 	Tree() 
-		: m_default_adding_strategy(0.25f),
-		  m_current_adding_strategy(&m_default_adding_strategy) {}
+		: m_default_adding_strategy(0.25f)
+	{
+		this->m_current_adding_strategy = &m_default_adding_strategy;
+		this->m_current_traversing_strategy = &m_default_traversing_strategy;
+	}
 
 	INode<T>* add(const T& data);
 
@@ -30,13 +34,14 @@ public:
 
 	Iterator<INode<T>*>* search(const T& data);
 
+	Iterator<INode<T>*>* traverse();
+
 	void swapNodes(INode<T>* first_node, INode<T>* second_node);
 
 	void swapData(INode<T>* first_node, INode<T>* second_node);
 
 	void printToConsole();
 
-	void setAddingStrategy(IAddingStrategy<T>* adding_strategy);
 };
 
 #include "INode.h"
@@ -45,16 +50,16 @@ public:
 template <typename T>
 INode<T>* Tree<T>::add(const T& data) {
 
-	INode<T>* newNode = new Node<T>(this->m_id_handler.pullId(), data, m_current_adding_strategy);
+	INode<T>* to_add = new Node<T>(this->m_id_handler.pullId(), data);
 
 	if (this->m_root_node == nullptr) {
-		this->m_root_node = newNode;
+		this->m_root_node = to_add;
 	}
 	else {
-		this->m_root_node->add(newNode);
+		this->m_current_adding_strategy->add(this->m_root_node, to_add);
 	}
 
-	return newNode;
+	return to_add;
 }
 
 template <typename T>
@@ -77,14 +82,21 @@ void Tree<T>::remove(INode<T>* node) {
 
 template<typename T>
 Iterator<INode<T>*>* Tree<T>::search(const T& data) {
-	TreeIterator<INode<T>*>* treeIterator = new TreeIterator<INode<T>*>();
+	TreeIterator<INode<T>*>* tree_iterator = new TreeIterator<INode<T>*>();
 
-	if (this->m_root_node->getData() == data)
-		treeIterator->add(this->m_root_node);
+	this->m_current_traversing_strategy->search(this->m_root_node, data, tree_iterator);
 
-	this->m_root_node->search(data, treeIterator);
+	return tree_iterator;
+}
 
-	return treeIterator;
+template<typename T>
+Iterator<INode<T>*>* Tree<T>::traverse()
+{
+	TreeIterator<INode<T>*>* tree_iterator = new TreeIterator<INode<T>*>();
+
+	this->m_current_traversing_strategy->traverse(this->m_root_node, tree_iterator);
+
+	return tree_iterator;
 }
 
 template<typename T>
@@ -122,18 +134,10 @@ void Tree<T>::printToConsole()
 	if (this->m_root_node != nullptr) {
 		Node<T>* root_node = (Node<T>*) this->m_root_node;
 
-		std::cout << root_node->getId() << std::endl;
+		std::cout << "+-" << root_node->getId() << std::endl;
 		for (auto& son : root_node->getSons()) {
-			son->print("  |-");
+			son->print("  +-");
 		}
 	}
-}
-
-template<typename T>
-void Tree<T>::setAddingStrategy(IAddingStrategy<T>* adding_strategy)
-{
-	m_current_adding_strategy = adding_strategy;
-	if(this->m_root_node != nullptr)
-		this->m_root_node->setAddingStrategy(adding_strategy);
 }
 
