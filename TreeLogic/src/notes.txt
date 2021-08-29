@@ -5,3 +5,5 @@ Either use smart pointers or figure out how to delete.
 Change parameters in functions to pointer reference wherever possible.
 
 Move default adding strategy and current adding strategy to ITree from Tree.
+
+Remove in node doesnt fill satisfying. Could be better ways to this.

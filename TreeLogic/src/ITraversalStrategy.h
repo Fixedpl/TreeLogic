@@ -21,7 +21,7 @@ protected:
 public:
 
 	virtual void search(INode<T>* root, const T& data, TreeIterator<INode<T>*>* tree_iterator, 
-					    const AddCondition& add_condition) = 0;
+					    const AddCondition& add_condition = AddCondition::SAME_DATA) = 0;
 
 	void traverse(INode<T>* root, TreeIterator<INode<T>*>* tree_iterator);
 
@@ -72,6 +72,7 @@ public:
 };
 
 #include "TreeIterator.h"
+#include "INode.h"
 
 template<typename T>
 void ITraversalStrategy<T>::add(INode<T>* root,
@@ -80,7 +81,9 @@ void ITraversalStrategy<T>::add(INode<T>* root,
 								const AddCondition& add_condition)
 {
 	if (add_condition == AddCondition::SAME_DATA) {
-		root->getData() == data ? tree_iterator->add(root) : ;
+		if (root->getData() == data) {
+			tree_iterator->add(root);
+		}
 	}
 	else if (add_condition == AddCondition::NO_CONDITION) {
 		tree_iterator->add(root);
@@ -91,7 +94,9 @@ void ITraversalStrategy<T>::add(INode<T>* root,
 template<typename T>
 void ITraversalStrategy<T>::traverse(INode<T>* root, TreeIterator<INode<T>*>* tree_iterator)
 {
-	search(root, NULL, tree_iterator, AddCondition::NO_CONDITION);
+	// VERY BAD BUT WORKS
+	T* not_used = nullptr;
+	search(root, *not_used, tree_iterator, AddCondition::NO_CONDITION);
 }
 
 template<typename T>
@@ -100,14 +105,14 @@ void PreOrderTraversal<T>::search(INode<T>* root,
 								  TreeIterator<INode<T>*>* tree_iterator, 
 								  const AddCondition& add_condition)
 {
-	assert(root == nullptr);
+	assert(root != nullptr);
 
 	this->add(root, data, tree_iterator, add_condition);
 
-	Iterator<INode<T>*>* son_iterator = root->getSons();
+	std::vector<INode<T>*> sons = root->getSons();
 
-	while (son_iterator->hasNext()) {
-		search(son_iterator->next(), data, tree_iterator, add_condition);
+	for (auto& son : sons) {
+		search(son, data, tree_iterator, add_condition);
 	}
 }
 
@@ -117,13 +122,13 @@ void InOrderTraversal<T>::search(INode<T>* root,
 								 TreeIterator<INode<T>*>* tree_iterator, 
 								 const AddCondition& add_condition)
 {
-	assert(root == nullptr);
+	assert(root != nullptr);
 
-	Iterator<INode<T>*>* son_iterator = root->getSons();
+	std::vector<INode<T>*> sons = root->getSons();
 
-	if (son_iterator->hasNext()) {
-		while (son_iterator->hasNext()) {
-			search(son_iterator->next(), data, tree_iterator, add_condition);
+	if (!sons.empty()) {
+		for (auto& son : sons) {
+			search(son, data, tree_iterator, add_condition);
 
 			this->add(root, data, tree_iterator, add_condition);
 		}
@@ -140,12 +145,12 @@ void PostOrderTraversal<T>::search(INode<T>* root,
 								   TreeIterator<INode<T>*>* tree_iterator, 
 								   const AddCondition& add_condition)
 {
-	assert(root == nullptr);
+	assert(root != nullptr);
 
-	Iterator<INode<T>*>* son_iterator = root->getSons();
+	std::vector<INode<T>*> sons = root->getSons();
 
-	while (son_iterator->hasNext()) {
-		search(son_iterator->next(), data, tree_iterator, add_condition);
+	for (auto& son : sons) {
+		search(son, data, tree_iterator, add_condition);
 	}
 
 	this->add(root, data, tree_iterator, add_condition);
@@ -157,19 +162,19 @@ void BFSTraversal<T>::search(INode<T>* root,
 							 TreeIterator<INode<T>*>* tree_iterator, 
 							 const AddCondition& add_condition)
 {
-	assert(root == nullptr);
+	assert(root != nullptr);
 
 	this->add(root, data, tree_iterator, add_condition);
 
-	Iterator<INode<T>*>* son_iterator = root->getSons();
+	std::vector<INode<T>*> sons = root->getSons();
 
-	while (son_iterator->hasNext()) {
-		queue.push(son_iterator->next());
+	for (auto& son : sons) {
+		queue.push(son);
 	}
 
 	while (!queue.empty()) {
 		INode<T>* first_in_queue = queue.front();
 		queue.pop();
-		search(son_iterator->next(), data, tree_iterator, add_condition);
+		search(first_in_queue, data, tree_iterator, add_condition);
 	}
 }
