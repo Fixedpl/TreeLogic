@@ -3,7 +3,6 @@
 
 #include "ITree.h"
 
-#include "TreeIterator.h"
 #include "IAddingStrategy.h"
 #include "ITraversalStrategy.h"
 #include "PrettyPrintTree.h"
@@ -35,9 +34,9 @@ public:
 
 	void remove(INode<T>* node);
 
-	Iterator<INode<T>*>* search(const T& data);
+	void search(const T& data, std::vector<INode<T>*>& vector_to_fill);
 
-	Iterator<INode<T>*>* traverse();
+	void traverse(std::vector<INode<T>*>& vector_to_fill);
 
 	void swapNodes(INode<T>* first_node, INode<T>* second_node);
 
@@ -70,12 +69,12 @@ void Tree<T>::remove(INode<T>* node) {
 
 	this->m_id_handler.pushId(node->getId());
 
-	node->remove();
+	for (auto& son : node->getSons()) {
+		remove(son);
+	}
 
 	if (node->m_father != nullptr) {
-		Node<T>* node_father = (Node<T>*) node->m_father;
-
-		node_father->removeSonPtr(node);
+		dynamic_cast<Node<T>*>(node->m_father)->removeSonPtr(node);
 	} else {
 		this->m_root_node = nullptr;
 	}
@@ -84,35 +83,36 @@ void Tree<T>::remove(INode<T>* node) {
 }
 
 template<typename T>
-Iterator<INode<T>*>* Tree<T>::search(const T& data) {
-	TreeIterator<INode<T>*>* tree_iterator = new TreeIterator<INode<T>*>();
-
-	this->m_current_traversing_strategy->search(this->m_root_node, data, tree_iterator);
-
-	return tree_iterator;
+void Tree<T>::search(const T& data, std::vector<INode<T>*>& vector_to_fill) {
+	if (this->m_root_node != nullptr) {
+		this->m_current_traversing_strategy->search(this->m_root_node, data, vector_to_fill);
+	}
+	else {
+		std::cout << "[WARNING]Tree.h: Trying to search empty tree\n";
+	}
 }
 
 template<typename T>
-Iterator<INode<T>*>* Tree<T>::traverse()
+void Tree<T>::traverse(std::vector<INode<T>*>& vector_to_fill)
 {
-	TreeIterator<INode<T>*>* tree_iterator = new TreeIterator<INode<T>*>();
-
-	this->m_current_traversing_strategy->traverse(this->m_root_node, tree_iterator);
-
-	return tree_iterator;
+	if (this->m_root_node != nullptr) {
+		this->m_current_traversing_strategy->traverse(this->m_root_node, vector_to_fill);
+	}
+	else {
+		std::cout << "[WARNING]Tree.h: Trying to traverse empty tree\n";
+	}
 }
 
 template<typename T>
 void Tree<T>::swapNodes(INode<T>* first_node, INode<T>* second_node)
 {
 	if (first_node == this->m_root_node || second_node == this->m_root_node) {
-		std::cout << "[Tree.h]ERROR: Can't swap root node";
+		std::cout << "[ERROR]Tree.h: Can't swap root node";
 		return;
 	}
 
-	// TODO: Use dynamic_cast
-	Node<T>* first_node_father = (Node<T>*) first_node->m_father;
-	Node<T>* second_node_father = (Node<T>*) second_node->m_father;
+	Node<T>* first_node_father = dynamic_cast<Node<T>*>(first_node->m_father);
+	Node<T>* second_node_father = dynamic_cast<Node<T>*>(second_node->m_father);
 
 	first_node_father->addSonPtr(second_node);
 	second_node_father->addSonPtr(first_node);
@@ -134,6 +134,9 @@ void Tree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
 template<typename T>
 void Tree<T>::printToConsole()
 {
-	m_tree_printer.print(this->m_root_node);
+	if (this->m_root_node != nullptr)
+		m_tree_printer.print(this->m_root_node);
+	else
+		std::cout << "[WARNING]Tree.h: Trying to print empty tree\n";
 }
 

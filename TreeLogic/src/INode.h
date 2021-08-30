@@ -3,14 +3,10 @@
 #include <string>
 #include <vector>
 
-#include "TreeIterator.h"
-
 
 template <typename T>
 class IAddingStrategy;
 
-template <typename T>
-class Iterator;
 
 
 template <typename T>
@@ -29,8 +25,6 @@ public:
 public:
 
 	virtual ~INode() {}
-
-	virtual void remove() = 0;
 
 	virtual std::vector<INode<T>*> getSons() = 0;
 

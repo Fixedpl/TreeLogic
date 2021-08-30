@@ -7,42 +7,32 @@ int main()
 {
     ITree<std::string>* regularTree = new Tree<std::string>();
 
-    IAddingStrategy<std::string>* adding_strat = new BalancedAddingStrategyRegularTree<std::string>(2);
-    IAddingStrategy<std::string>* adding_strat2 = new RandomAddingStrategyRegularTree<std::string>(0.3f);
+    regularTree->add("root node");
+    regularTree->add("child node");
+    regularTree->add("child node");
+    regularTree->add("child node");
 
-    ITraversalStrategy<std::string>* traversing_strat = new BFSTraversal<std::string>();
+    while (true) {
+        std::vector<INode<std::string>*> vec;
 
-    regularTree->setAddingStrategy(adding_strat2);
-    regularTree->setTraversingStrategy(traversing_strat);
+        regularTree->search("root node", vec);
 
+        regularTree->printToConsole();
 
+        regularTree->remove(vec[0]);
 
-    for (int i = 0; i < 20; i++) {
-        regularTree->add("");
+        regularTree->printToConsole();
+
+        regularTree->add("root node");
+        regularTree->add("child node");
+        regularTree->add("child node");
+        regularTree->add("child node");
+
+        regularTree->printToConsole();
+        std::string empty;
+        std::cin >> empty;
     }
-
-    regularTree->setAddingStrategy(adding_strat);
-
-    regularTree->add("test 1");
-    regularTree->add("test 1");
-    regularTree->add("test 2");
-
-    regularTree->printToConsole();
-
-    Iterator<INode<std::string>*>* it = regularTree->traverse();
-
-    while (it->hasNext()) {
-        std::cout << it->next()->getId() << ", ";
-    }
-
-    std::cout << std::endl;
-
-    regularTree->printToConsole();
-
-    delete regularTree;
-    delete adding_strat;
-    delete adding_strat2;
-    delete traversing_strat;
+    
 
     return 0;
 }

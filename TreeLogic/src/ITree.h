@@ -1,5 +1,4 @@
 #pragma once
-#include "Iterator.h"
 #include "IDHandler.h"
 
 template <typename T>
@@ -32,9 +31,9 @@ public:
 
 	virtual void remove(INode<T>* node) = 0;
 
-	virtual Iterator<INode<T>*>* search(const T& data) = 0;
+	virtual void search(const T& data, std::vector<INode<T>*>& vector_to_fill) = 0;
 
-	virtual Iterator<INode<T>*>* traverse() = 0;
+	virtual void traverse(std::vector<INode<T>*>& vector_to_fill) = 0;
 
 	virtual void swapNodes(INode<T>* first_node, INode<T>* second_node) = 0;
 

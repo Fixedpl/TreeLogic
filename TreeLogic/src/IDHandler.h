@@ -13,7 +13,7 @@ private:
 private:
 
 	// [begId, endId)
-	void addRange(uint32_t begId, uint32_t endId) {
+	void addRange(const uint32_t& begId, const uint32_t& endId) {
 		for (uint32_t i = begId; i < endId; i++) {
 			m_free_ids.push(i);
 		}

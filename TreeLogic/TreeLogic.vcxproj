@@ -143,25 +143,21 @@
     <ClCompile Include="src\ITraversalStrategy.cpp" />
     <ClCompile Include="src\IDHandler.cpp" />
     <ClCompile Include="src\IAddingStrategy.cpp" />
-    <ClCompile Include="src\Iterator.cpp" />
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\INode.cpp" />
     <ClCompile Include="src\TreeLogic.cpp" />
     <ClCompile Include="src\ITree.cpp" />
     <ClCompile Include="src\Tree.cpp" />
-    <ClCompile Include="src\TreeIterator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\PrettyPrintTree.h" />
     <ClInclude Include="src\ITraversalStrategy.h" />
     <ClInclude Include="src\IDHandler.h" />
     <ClInclude Include="src\IAddingStrategy.h" />
-    <ClInclude Include="src\Iterator.h" />
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\INode.h" />
     <ClInclude Include="src\ITree.h" />
     <ClInclude Include="src\Tree.h" />
-    <ClInclude Include="src\TreeIterator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\notes.txt" />

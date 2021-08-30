@@ -62,12 +62,12 @@ public:
 template<typename T>
 void RandomAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 {
-	float random_number = rand() / (float)(RAND_MAX);
+	float random_number = rand() / static_cast<float>(RAND_MAX);
 	if (random_number <= m_chance_of_adding_to_current_node || root->sonsCount() == 0) {
-		((Node<T>*)root)->addSonPtr(to_add);
+		dynamic_cast<Node<T>*>(root)->addSonPtr(to_add);
 	}
 	else {
-		std::vector<INode<T>*> sons = ((Node<T>*)root)->getSons();
+		std::vector<INode<T>*> sons = root->getSons();
 		int max = sons.size() - 1;
 		int winner = rand() % (max + 1);
 		add(sons[winner], to_add);
@@ -84,11 +84,11 @@ template<typename T>
 void BalancedAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 {
 	if (root->sonsCount() < m_max_sons_per_node) {
-		((Node<T>*)root)->addSonPtr(to_add);
+		dynamic_cast<Node<T>*>(root)->addSonPtr(to_add);
 	}
 	else {
-		INode<T>* smallest_subtree_node = ((Node<T>*)root)->getSons()[0];
-		for (auto& node : ((Node<T>*)root)->getSons()) {
+		INode<T>* smallest_subtree_node = root->getSons()[0];
+		for (auto& node : root->getSons()) {
 			if (node->subtreeNodeCount() < smallest_subtree_node->subtreeNodeCount())
 				smallest_subtree_node = node;
 		}

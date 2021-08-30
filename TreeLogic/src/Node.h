@@ -4,7 +4,6 @@
 #include <cstdint>
 
 #include "INode.h"
-#include "TreeIterator.h"
 
 
 
@@ -25,8 +24,6 @@ public:
 	void addSonPtr(INode<T>* node);
 
 	void removeSonPtr(INode<T>* node);
-
-	void remove();
 
 	uint32_t sonsCount();
 
@@ -49,14 +46,6 @@ template <typename T>
 void Node<T>::addSonPtr(INode<T>* node) {
 	node->m_father = this;
 	m_sons.push_back(node);
-}
-
-template <typename T>
-void Node<T>::remove() {
-	for (auto& node : m_sons) {
-		node->remove();
-		delete node;
-	}
 }
 
 template<typename T>
