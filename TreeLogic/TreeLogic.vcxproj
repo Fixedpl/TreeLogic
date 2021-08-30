@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\PrettyPrintTree.cpp" />
     <ClCompile Include="src\ITraversalStrategy.cpp" />
     <ClCompile Include="src\IDHandler.cpp" />
     <ClCompile Include="src\IAddingStrategy.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\TreeIterator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\PrettyPrintTree.h" />
     <ClInclude Include="src\ITraversalStrategy.h" />
     <ClInclude Include="src\IDHandler.h" />
     <ClInclude Include="src\IAddingStrategy.h" />

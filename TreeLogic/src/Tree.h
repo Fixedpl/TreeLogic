@@ -6,6 +6,7 @@
 #include "TreeIterator.h"
 #include "IAddingStrategy.h"
 #include "ITraversalStrategy.h"
+#include "PrettyPrintTree.h"
 
 template <typename T>
 class INode;
@@ -18,6 +19,8 @@ private:
 	RandomAddingStrategyRegularTree<T> m_default_adding_strategy;
 
 	PreOrderTraversal<T> m_default_traversing_strategy;
+
+	PrettyPrintTree<T> m_tree_printer;
 
 public:
 
@@ -131,6 +134,7 @@ void Tree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
 template<typename T>
 void Tree<T>::printToConsole()
 {
+	/*
 	if (this->m_root_node != nullptr) {
 		Node<T>* root_node = (Node<T>*) this->m_root_node;
 
@@ -139,5 +143,8 @@ void Tree<T>::printToConsole()
 			son->print("  +-");
 		}
 	}
+	std::cout << std::endl;
+	*/
+	m_tree_printer.print(this->m_root_node);
 }
 

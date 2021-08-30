@@ -9,7 +9,7 @@ int main()
 
     IAddingStrategy<std::string>* adding_strat = new BalancedAddingStrategyRegularTree<std::string>(2);
     IAddingStrategy<std::string>* adding_strat2 = new RandomAddingStrategyRegularTree<std::string>(0.3f);
-    
+
     ITraversalStrategy<std::string>* traversing_strat = new BFSTraversal<std::string>();
 
     regularTree->setAddingStrategy(adding_strat2);
@@ -17,7 +17,7 @@ int main()
 
 
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 50; i++) {
         regularTree->add("");
     }
 
@@ -46,5 +46,3 @@ int main()
 
     return 0;
 }
-
-
