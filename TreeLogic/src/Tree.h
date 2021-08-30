@@ -134,17 +134,6 @@ void Tree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
 template<typename T>
 void Tree<T>::printToConsole()
 {
-	/*
-	if (this->m_root_node != nullptr) {
-		Node<T>* root_node = (Node<T>*) this->m_root_node;
-
-		std::cout << "+-" << root_node->getId() << std::endl;
-		for (auto& son : root_node->getSons()) {
-			son->print("  +-");
-		}
-	}
-	std::cout << std::endl;
-	*/
 	m_tree_printer.print(this->m_root_node);
 }
 

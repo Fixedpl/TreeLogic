@@ -34,8 +34,6 @@ public:
 
 	std::vector<INode<T>*> getSons();
 
-	void print(const std::string& prefix);
-
 };
 
 #include "IAddingStrategy.h"
@@ -88,13 +86,3 @@ std::vector<INode<T>*> Node<T>::getSons()
 {
 	return m_sons;
 }
-
-template<typename T>
-void Node<T>::print(const std::string& prefix)
-{
-	std::cout << prefix << this->m_id << std::endl;
-	for (auto& son : m_sons) {
-		son->print("  " + prefix);
-	}
-}
-

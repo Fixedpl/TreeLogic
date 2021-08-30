@@ -44,6 +44,4 @@ public:
 
 	void setData(const T& data) { m_data = data; }
 
-	virtual void print(const std::string& prefix) = 0;
-
 };
