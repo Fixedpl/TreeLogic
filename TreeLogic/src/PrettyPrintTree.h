@@ -14,17 +14,17 @@ class PrettyPrintTree
 {
 private:
 
-	void addSpaces(std::string& line, uint32_t spaces_amount);
+	void addSpaces(std::string& line, const uint32_t& spaces_amount);
 
 	void buildTreeSkeleton(INode<T>* root_node,
-				 std::string tree_view[], 
-				 uint32_t size, 
-				 uint32_t level = 0, 
-				 FatherDirection father_direction = FatherDirection::NONE);
+						   std::string* tree_view,
+						   const uint32_t& size,
+						   const uint32_t& level = 0, 
+						   const FatherDirection& father_direction = FatherDirection::NONE);
 
-	void fillMissingLines(std::string tree_view[], uint32_t size);
+	void fillMissingLines(std::string* tree_view, const uint32_t& size);
 
-	uint32_t findDiameter(INode<T>* root_node, uint32_t level = 1);
+	uint32_t findDiameter(INode<T>* root_node, const uint32_t& level = 1);
 
 public:
 
@@ -35,15 +35,18 @@ public:
 #include "INode.h"
 
 template <typename T>
-void PrettyPrintTree<T>::addSpaces(std::string& line, uint32_t spaces_amount)
+void PrettyPrintTree<T>::addSpaces(std::string& line, const uint32_t& spaces_amount)
 {
 	for (int i = 0; i < spaces_amount; i++)
 		line += " ";
 }
 
 template <typename T>
-void PrettyPrintTree<T>::buildTreeSkeleton(INode<T>* root_node, std::string tree_view[], uint32_t size, uint32_t level,
-	FatherDirection father_direction)
+void PrettyPrintTree<T>::buildTreeSkeleton(INode<T>* root_node, 
+										   std::string* tree_view, 
+										   const uint32_t& size, 
+										   const uint32_t& level,
+										   const FatherDirection& father_direction)
 {
 	std::vector<INode<T>*> sons = root_node->getSons();
 	uint32_t sons_count = root_node->sonsCount();
@@ -82,7 +85,7 @@ void PrettyPrintTree<T>::buildTreeSkeleton(INode<T>* root_node, std::string tree
 }
 
 template <typename T>
-void PrettyPrintTree<T>::fillMissingLines(std::string tree_view[], uint32_t size)
+void PrettyPrintTree<T>::fillMissingLines(std::string* tree_view, const uint32_t& size)
 {
 	for (int i = 1; i < size; i += 2) {
 		bool lock = false;
@@ -115,7 +118,7 @@ void PrettyPrintTree<T>::fillMissingLines(std::string tree_view[], uint32_t size
 }
 
 template <typename T>
-uint32_t PrettyPrintTree<T>::findDiameter(INode<T>* root_node, uint32_t level /* = 1 */)
+uint32_t PrettyPrintTree<T>::findDiameter(INode<T>* root_node, const uint32_t& level /* = 1 */)
 {
 	uint32_t highest = level;
 	for (auto& son : root_node->getSons()) {
@@ -137,21 +140,6 @@ void PrettyPrintTree<T>::print(INode<T>* root_node)
 	for (int i = 0; i < tree_diameter; ++i) {
 		std::cout << tree_view_to_fill[i] << std::endl;
 	}
-	/*
-	std::vector<INode<T>*> sons = root_node->getSons();
-	uint32_t sons_count = root_node->sonsCount();
 
-	// AMOUNT OF NODES THAT WILL BE DISPLAYED ON THE LEFT OF ROOT NODE
-	uint32_t left_sons = (sons_count + 1) / 2;
-
-	uint32_t left_subtree_count = 0;
-	for (int i = 0; i < left_sons; ++i)
-		left_subtree_count += sons[i]->subtreeNodeCount();
-
-	for (int i = 0; i < left_subtree_count; ++i)
-		std::cout << " ";
-	std::cout << root_node->getId() << std::endl;
-
-	__print(root_node);
-	*/
+	delete[] tree_view_to_fill;
 }
