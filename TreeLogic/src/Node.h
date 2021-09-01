@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <cstdint>
+#include <cstdlib>
+#include <ctime>
 
 #include "INode.h"
 
@@ -17,13 +19,20 @@ protected:
 
 	std::vector<INode<T>*> m_sons;
 
+	std::random_device m_random_device;
+	std::mt19937 m_rng;
+
 public:
 
 	Node(const uint32_t& id, const T& data);
 
 	void addSonPtr(INode<T>* node);
 
+	void addSonPtrRandomly(INode<T>* node);
+	
 	void removeSonPtr(INode<T>* node);
+
+	void swapSonPtrs(INode<T>* son, INode<T>* replacement);
 
 	uint32_t sonsCount();
 
@@ -37,15 +46,33 @@ public:
 
 template <typename T>
 Node<T>::Node(const uint32_t& id, const T& data)
+	: INode<T>(id, data)
 {
-	this->m_id = id;
-	this->m_data = data;
+}
+
+template<typename T>
+void Node<T>::swapSonPtrs(INode<T>* son, INode<T>* replacement)
+{
+	for (int i = 0; i < m_sons.size(); ++i) {
+		if (son == m_sons[i])
+			m_sons[i] = replacement;
+	}
 }
 
 template <typename T>
 void Node<T>::addSonPtr(INode<T>* node) {
 	node->m_father = this;
 	m_sons.push_back(node);
+}
+
+template <typename T>
+void Node<T>::addSonPtrRandomly(INode<T>* node)
+{
+	std::uniform_int_distribution<std::mt19937::result_type> random_int(0, m_sons.size());
+	auto iterator = m_sons.begin();
+	for (int i = 0; i < random_int(this->m_rng); ++i)
+		++iterator;
+	m_sons.insert(iterator, node);
 }
 
 template<typename T>

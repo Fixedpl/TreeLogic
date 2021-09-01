@@ -1,34 +1,41 @@
 ﻿#include <iostream>
 
 #include "Tree.h"
+#include "BinaryTree.h"
 #include "IAddingStrategy.h"
 
 int main()
 {
-    ITree<std::string>* regularTree = new Tree<std::string>();
+    ITree<std::string>* binary_tree = new BinaryTree<std::string>();
 
-    regularTree->add("root node");
-    regularTree->add("child node");
-    regularTree->add("child node");
-    regularTree->add("child node");
+    IAddingStrategy<std::string>* balanced_strat_btree = new BalancedAddingStrategyBinaryTree<std::string>();
+
+    binary_tree->setAddingStrategy(balanced_strat_btree);
+
+    binary_tree->add("root node");
+    binary_tree->add("child node");
+    binary_tree->add("child node");
+    binary_tree->add("child node");
 
     while (true) {
         std::vector<INode<std::string>*> vec;
 
-        regularTree->search("root node", vec);
+        binary_tree->search("root node", vec);
 
-        regularTree->printToConsole();
+        binary_tree->printToConsole();
 
-        regularTree->remove(vec[0]);
+        binary_tree->remove(vec[0]);
 
-        regularTree->printToConsole();
+        binary_tree->add("root node");
+        binary_tree->add("child node");
+        binary_tree->add("child node");
+        binary_tree->add("child node");
+        binary_tree->add("child node");
+        binary_tree->add("child node");
+        binary_tree->add("child node");
+        binary_tree->add("child node");
+        binary_tree->add("child node");
 
-        regularTree->add("root node");
-        regularTree->add("child node");
-        regularTree->add("child node");
-        regularTree->add("child node");
-
-        regularTree->printToConsole();
         std::string empty;
         std::cin >> empty;
     }

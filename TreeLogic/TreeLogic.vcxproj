@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BinaryTree.cpp" />
+    <ClCompile Include="src\BNode.cpp" />
     <ClCompile Include="src\PrettyPrintTree.cpp" />
     <ClCompile Include="src\ITraversalStrategy.cpp" />
     <ClCompile Include="src\IDHandler.cpp" />
@@ -150,6 +152,8 @@
     <ClCompile Include="src\Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BinaryTree.h" />
+    <ClInclude Include="src\BNode.h" />
     <ClInclude Include="src\PrettyPrintTree.h" />
     <ClInclude Include="src\ITraversalStrategy.h" />
     <ClInclude Include="src\IDHandler.h" />

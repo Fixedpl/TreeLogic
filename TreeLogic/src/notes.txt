@@ -1,0 +1,2 @@
+
+Move Tree methods implementations to ITree

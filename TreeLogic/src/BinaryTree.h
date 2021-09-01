@@ -1,21 +1,19 @@
-﻿#pragma once
-#include <iostream>
+#pragma once
+#include <vector>
 
 #include "ITree.h"
+#include "IAddingStrategy.h"
 
 template <typename T>
-class INode;
-
-template <typename T>
-class Tree : public ITree<T>
+class BinaryTree : public ITree<T>
 {
 private:
 
-	RandomAddingStrategyRegularTree<T> m_default_adding_strategy;
+	RandomAddingStrategyBinaryTree<T> m_default_adding_strategy;
 
 public:
 
-	Tree();
+	BinaryTree();
 
 	INode<T>* add(const T& data);
 
@@ -27,20 +25,19 @@ public:
 
 };
 
-#include "INode.h"
-#include "Node.h"
+#include "BNode.h"
 
 template<typename T>
-Tree<T>::Tree()
-	: m_default_adding_strategy(0.3f),
-	  ITree<T>(&m_default_adding_strategy)
+BinaryTree<T>::BinaryTree()
+	:	m_default_adding_strategy(0.4f),
+		ITree<T>(&m_default_adding_strategy)
 {
 }
 
 template <typename T>
-INode<T>* Tree<T>::add(const T& data) {
-
-	INode<T>* to_add = new Node<T>(this->m_id_handler.pullId(), data);
+INode<T>* BinaryTree<T>::add(const T& data)
+{
+	INode<T>* to_add = new BNode<T>(this->m_id_handler.pullId(), data);
 
 	if (this->m_root_node == nullptr) {
 		this->m_root_node = to_add;
@@ -52,8 +49,8 @@ INode<T>* Tree<T>::add(const T& data) {
 }
 
 template <typename T>
-void Tree<T>::remove(INode<T>* node) {
-
+void BinaryTree<T>::remove(INode<T>* node)
+{
 	this->m_id_handler.pushId(node->getId());
 
 	for (auto& son : node->getSons()) {
@@ -61,29 +58,33 @@ void Tree<T>::remove(INode<T>* node) {
 	}
 
 	if (node->m_father != nullptr) {
-		dynamic_cast<Node<T>*>(node->m_father)->removeSonPtr(node);
+		dynamic_cast<BNode<T>*>(node->m_father)->removeSonPtr(node);
 	} else {
 		this->m_root_node = nullptr;
 	}
-		
+
 	delete node;
 }
 
-template<typename T>
-void Tree<T>::search(const T& data, std::vector<INode<T>*>& vector_to_fill) {
+template <typename T>
+void BinaryTree<T>::search(const T& data, std::vector<INode<T>*>& vector_to_fill)
+{
 	if (this->m_root_node != nullptr) {
 		this->m_current_traversing_strategy->search(this->m_root_node, data, vector_to_fill);
-	} else {
+	}
+	else {
 		std::cout << "[WARNING]Tree.h: Trying to search empty tree\n";
 	}
 }
 
-template<typename T>
-void Tree<T>::traverse(std::vector<INode<T>*>& vector_to_fill)
+template <typename T>
+void BinaryTree<T>::traverse(std::vector<INode<T>*>& vector_to_fill)
 {
 	if (this->m_root_node != nullptr) {
 		this->m_current_traversing_strategy->traverse(this->m_root_node, vector_to_fill);
-	} else {
+	}
+	else {
 		std::cout << "[WARNING]Tree.h: Trying to traverse empty tree\n";
 	}
 }
+
