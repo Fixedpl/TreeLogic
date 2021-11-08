@@ -4,9 +4,6 @@
 #include <vector>
 #include <random>
 
-template <typename T>
-class IAddingStrategy;
-
 
 
 template <typename T>

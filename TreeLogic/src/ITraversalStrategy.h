@@ -6,6 +6,9 @@
 template <typename T>
 class INode;
 
+
+//		NO_CONDITION - All nodes on the way are added to vector
+//		SAME_DATA	 - Only nodes with the same data are added to vector
 enum class AddCondition { NO_CONDITION, SAME_DATA };
 
 template <typename T>

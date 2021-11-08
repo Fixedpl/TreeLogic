@@ -10,18 +10,8 @@
 
 
 template <typename T>
-class IAddingStrategy;
-
-template <typename T>
 class Node : public INode<T>
 {
-protected:
-
-	std::vector<INode<T>*> m_sons;
-
-	std::random_device m_random_device;
-	std::mt19937 m_rng;
-
 public:
 
 	Node(const uint32_t& id, const T& data);
@@ -29,7 +19,7 @@ public:
 	void addSonPtr(INode<T>* node);
 
 	void addSonPtrRandomly(INode<T>* node);
-	
+
 	void removeSonPtr(INode<T>* node);
 
 	void swapSonPtrs(INode<T>* son, INode<T>* replacement);
@@ -40,9 +30,14 @@ public:
 
 	std::vector<INode<T>*> getSons();
 
-};
+protected:
 
-#include "IAddingStrategy.h"
+	std::vector<INode<T>*> m_sons;
+
+	std::random_device m_random_device;
+	std::mt19937 m_rng;
+
+};
 
 template <typename T>
 Node<T>::Node(const uint32_t& id, const T& data)

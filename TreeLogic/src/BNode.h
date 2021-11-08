@@ -9,11 +9,6 @@
 template <typename T>
 class BNode : public INode<T>
 {
-protected:
-
-	INode<T>* m_left_son = nullptr;
-	INode<T>* m_right_son = nullptr;
-
 public:
 
 	BNode(const uint32_t& id, const T& data);
@@ -32,7 +27,10 @@ public:
 
 	uint32_t subtreeNodeCount();
 
+protected:
 
+	INode<T>* m_left_son = nullptr;
+	INode<T>* m_right_son = nullptr;
 
 };
 

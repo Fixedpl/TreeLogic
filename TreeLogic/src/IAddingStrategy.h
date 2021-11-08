@@ -17,9 +17,11 @@ enum class AdditionalCondition {
 template <typename T>
 class IAddingStrategy
 {
-public:
+protected:
 
 	virtual void add(INode<T>* root, INode<T>* to_add) = 0;
+	
+	friend class ITree<T>;
 
 };
 
@@ -41,26 +43,17 @@ private:
 
 protected:
 
-	RandomAddingStrategyRegularTree(const float& chance_of_adding_to_current_node, const AdditionalCondition& additional_condition)
-		:	m_chance_of_adding_to_current_node(chance_of_adding_to_current_node),
-			m_rng(m_random_device())
-	{
-		srand(time(0));
-		m_additional_conditions.push_back(additional_condition);
-	}
-
-public:
-
-	RandomAddingStrategyRegularTree(const float& chance_of_adding_to_current_node = 0.3f)
-		:	m_chance_of_adding_to_current_node(chance_of_adding_to_current_node)
-	{
-		srand(time(0));
-	}
+	// FOR INHERITING CLASSES
+	RandomAddingStrategyRegularTree(const float& chance_of_adding_to_current_node, const AdditionalCondition& additional_condition);
 
 	void add(INode<T>* root, INode<T>* to_add);
 
-	void setChanceOfAddingToCurrentNode(const float& chance_of_adding_to_current_node)
-		{ m_chance_of_adding_to_current_node = chance_of_adding_to_current_node; }
+public:
+
+	RandomAddingStrategyRegularTree(const float& chance_of_adding_to_current_node = 0.3f);
+
+	void setChanceOfAddingToCurrentNode(const float& chance_of_adding_to_current_node);
+
 };
 
 template <typename T>
@@ -70,16 +63,15 @@ private:
 
 	uint32_t m_max_sons_per_node;
 
-public:
-
-	BalancedAddingStrategyRegularTree(const uint32_t& max_sons_per_node = 3)
-		: m_max_sons_per_node(max_sons_per_node)
-	{
-	}
+protected:
 
 	void add(INode<T>* root, INode<T>* to_add);
 
-	void setMaxSonsPerNode(const uint32_t& max_sons_per_node) { m_max_sons_per_node = max_sons_per_node; }
+public:
+
+	BalancedAddingStrategyRegularTree(const uint32_t& max_sons_per_node = 3);
+
+	void setMaxSonsPerNode(const uint32_t& max_sons_per_node);
 };
 
 template <typename T>
@@ -91,11 +83,7 @@ private:
 
 public:
 
-	RandomAddingStrategyBinaryTree(const float& chance_of_adding_to_current_node = 0.4f)
-		:	m_limit_to_2_nodes(AdditionalCondition::BTree2Nodes),
-			RandomAddingStrategyRegularTree<T>(chance_of_adding_to_current_node, m_limit_to_2_nodes)
-	{
-	}
+	RandomAddingStrategyBinaryTree(const float& chance_of_adding_to_current_node = 0.4f);
 
 };
 
@@ -104,13 +92,9 @@ class BalancedAddingStrategyBinaryTree : public BalancedAddingStrategyRegularTre
 {
 public:
 
-	BalancedAddingStrategyBinaryTree(const uint32_t& max_sons_per_node = 2)
-		: BalancedAddingStrategyRegularTree<T>(max_sons_per_node)
-	{
-	}
+	BalancedAddingStrategyBinaryTree(const uint32_t& max_sons_per_node = 2);
 };
 
-#include "INode.h"
 #include "Node.h"
 
 template <typename T>
@@ -125,6 +109,24 @@ bool RandomAddingStrategyRegularTree<T>::additionalCheck(const AdditionalConditi
 		}
 	}
 	return true;
+}
+
+template<typename T>
+RandomAddingStrategyRegularTree<T>::RandomAddingStrategyRegularTree(const float& chance_of_adding_to_current_node, const AdditionalCondition& additional_condition)
+:
+m_chance_of_adding_to_current_node(chance_of_adding_to_current_node),
+m_rng(m_random_device())
+{
+	srand(time(0));
+	m_additional_conditions.push_back(additional_condition);
+}
+
+template<typename T>
+RandomAddingStrategyRegularTree<T>::RandomAddingStrategyRegularTree(const float& chance_of_adding_to_current_node)
+:
+m_chance_of_adding_to_current_node(chance_of_adding_to_current_node)
+{
+	srand(time(0));
 }
 
 template <typename T>
@@ -144,6 +146,19 @@ void RandomAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 	}
 }
 
+template<typename T>
+void RandomAddingStrategyRegularTree<T>::setChanceOfAddingToCurrentNode(const float& chance_of_adding_to_current_node)
+{
+	m_chance_of_adding_to_current_node = chance_of_adding_to_current_node;
+}
+
+template<typename T>
+BalancedAddingStrategyRegularTree<T>::BalancedAddingStrategyRegularTree(const uint32_t& max_sons_per_node)
+:
+m_max_sons_per_node(max_sons_per_node)
+{
+}
+
 template <typename T>
 void BalancedAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 {
@@ -160,4 +175,25 @@ void BalancedAddingStrategyRegularTree<T>::add(INode<T>* root, INode<T>* to_add)
 		}
 		add(smallest_subtree_node, to_add);
 	}
+}
+
+template<typename T>
+void BalancedAddingStrategyRegularTree<T>::setMaxSonsPerNode(const uint32_t& max_sons_per_node)
+{
+	m_max_sons_per_node = max_sons_per_node;
+}
+
+template<typename T>
+RandomAddingStrategyBinaryTree<T>::RandomAddingStrategyBinaryTree(const float& chance_of_adding_to_current_node)
+:
+m_limit_to_2_nodes(AdditionalCondition::BTree2Nodes),
+RandomAddingStrategyRegularTree<T>(chance_of_adding_to_current_node, m_limit_to_2_nodes)
+{
+}
+
+template<typename T>
+BalancedAddingStrategyBinaryTree<T>::BalancedAddingStrategyBinaryTree(const uint32_t& max_sons_per_node)
+:
+BalancedAddingStrategyRegularTree<T>(max_sons_per_node)
+{
 }
