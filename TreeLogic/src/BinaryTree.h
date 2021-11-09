@@ -9,7 +9,7 @@ class BinaryTree : public ITree<T>
 {
 private:
 
-	RandomAddingStrategyBinaryTree<T> m_default_adding_strategy;
+	RandomAddingStrategyBinaryTree m_default_adding_strategy;
 
 public:
 
@@ -33,13 +33,13 @@ ITree<T>(&m_default_adding_strategy)
 template <typename T>
 INode<T>* BinaryTree<T>::add(const T& data)
 {
-	return this->_add(new BNode<T>(this->m_id_handler.pullId(), data));
+	return dynamic_cast<INode<T>*>(this->_add(new BBNode<T>(this->m_id_handler.pullId(), data)));
 }
 
 template<typename T>
 INode<T>* BinaryTree<T>::add(const T& data, const std::string& path)
 {
-	return this->_add(new BNode<T>(data), path);
+	return dynamic_cast<INode<T>*>(this->_add(new BBNode<T>(data), path));
 }
 
 

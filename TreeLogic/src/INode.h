@@ -7,8 +7,48 @@
 
 
 
+class BINode
+{
+public:
+
+	BINode();
+
+	virtual ~BINode();
+
+	virtual bool addSonPtr(BINode* node) = 0;
+
+	virtual void addSonPtrRandomly(BINode* node) = 0;
+
+	virtual void removeSonPtr(BINode* node) = 0;
+
+	virtual void swapSonPtrs(BINode* son, BINode* replacement) = 0;
+
+	virtual uint32_t sonsCount() = 0;
+
+	virtual uint32_t subtreeNodeCount() = 0;
+
+	virtual std::vector<BINode*> getSonsAbstract() = 0;
+
+	uint32_t getId();
+	void setId(const uint32_t& id);
+
+	BINode* getFatherAbstract();
+	void setFather(BINode* node);
+
+protected:
+
+	uint32_t m_id;
+
+	BINode* m_father;
+
+	std::random_device m_random_device;
+	std::mt19937 m_rng;
+
+};
+
+
 template <typename T>
-class INode
+class INode : virtual public BINode
 {
 public:
 
@@ -16,48 +56,27 @@ public:
 
 	virtual ~INode();
 
-	virtual bool addSonPtr(INode<T>* node) = 0;
-
-	virtual void addSonPtrRandomly(INode<T>* node) = 0;
-
-	virtual void removeSonPtr(INode<T>* node) = 0;
-
-	virtual void swapSonPtrs(INode<T>* son, INode<T>* replacement) = 0;
-
 	virtual std::vector<INode<T>*> getSons() = 0;
 
-	virtual uint32_t sonsCount() = 0;
-
-	virtual uint32_t subtreeNodeCount() = 0;
-
-	inline uint32_t getId();
-	void setId(const uint32_t& id);
+	INode<T>* getFather();
 
 	inline T getData();
 
 	void setData(const T& data);
 
-	INode<T>* getFather();
-	void setFather(INode<T>* node);
 
 protected:
 
-	uint32_t m_id;
-
 	T m_data;
-
-	std::random_device m_random_device;
-	std::mt19937 m_rng;
-
-	INode<T>* m_father = nullptr;
 
 };
 
 template <typename T>
 INode<T>::INode(const uint32_t& id, const T& data)
+:
+m_data(data)
 {
 	m_id = id;
-	m_data = data;
 }
 
 template<typename T>
@@ -65,16 +84,11 @@ INode<T>::~INode()
 {
 }
 
-template<typename T>
-uint32_t INode<T>::getId()
-{
-	return m_id;
-}
 
 template<typename T>
-void INode<T>::setId(const uint32_t& id)
+INode<T>* INode<T>::getFather()
 {
-	m_id = id;
+	return dynamic_cast<INode<T>*>(this->m_father);
 }
 
 template<typename T>
@@ -89,17 +103,3 @@ void INode<T>::setData(const T& data)
 	m_data = data;
 }
 
-template<typename T>
-INode<T>* INode<T>::getFather()
-{
-	return m_father;;
-}
-
-template<typename T>
-void INode<T>::setFather(INode<T>* node)
-{
-	if (m_father) {
-		std::cout << "[WARNING] Father already exists. Node was overwritten\n";
-	}
-	m_father = node;
-}
