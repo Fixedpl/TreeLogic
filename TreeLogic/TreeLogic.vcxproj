@@ -174,7 +174,7 @@
     <ClInclude Include="src\INode.h" />
     <ClInclude Include="src\ITree.h" />
     <ClInclude Include="src\Tree.h" />
-    <ClInclude Include="tests\regular_tree.h" />
+    <ClInclude Include="tests\path_adding.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\notes.txt" />

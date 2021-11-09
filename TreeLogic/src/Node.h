@@ -15,8 +15,9 @@ class Node : public INode<T>
 public:
 
 	Node(const uint32_t& id, const T& data);
+	Node(const T& data);
 
-	void addSonPtr(INode<T>* node);
+	bool addSonPtr(INode<T>* node);
 
 	void addSonPtrRandomly(INode<T>* node);
 
@@ -41,7 +42,15 @@ protected:
 
 template <typename T>
 Node<T>::Node(const uint32_t& id, const T& data)
-	: INode<T>(id, data)
+:
+INode<T>(id, data)
+{
+}
+
+template<typename T>
+Node<T>::Node(const T& data)
+:
+INode<T>(0, data)
 {
 }
 
@@ -49,15 +58,18 @@ template<typename T>
 void Node<T>::swapSonPtrs(INode<T>* son, INode<T>* replacement)
 {
 	for (int i = 0; i < m_sons.size(); ++i) {
-		if (son == m_sons[i])
+		if (son == m_sons[i]) {
 			m_sons[i] = replacement;
+		}
+			
 	}
 }
 
 template <typename T>
-void Node<T>::addSonPtr(INode<T>* node) {
-	node->m_father = this;
+bool Node<T>::addSonPtr(INode<T>* node) {
+	node->setFather(this);
 	m_sons.push_back(node);
+	return true;
 }
 
 template <typename T>
@@ -65,8 +77,9 @@ void Node<T>::addSonPtrRandomly(INode<T>* node)
 {
 	std::uniform_int_distribution<std::mt19937::result_type> random_int(0, m_sons.size());
 	auto iterator = m_sons.begin();
-	for (int i = 0; i < random_int(this->m_rng); ++i)
+	for (int i = 0; i < random_int(this->m_rng); ++i) {
 		++iterator;
+	}
 	m_sons.insert(iterator, node);
 }
 

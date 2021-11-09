@@ -1,2 +1,6 @@
 
+Using adding with path cannot be mixed with normal adding because of id collisions. To fix
+
+Path adding doesnt work for incorrect input in string like "a0 1"
+Path adding doesnt show error if 2 same ids are passed like "0" and then "0 0"
 

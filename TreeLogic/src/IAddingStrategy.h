@@ -10,6 +10,9 @@
 template <typename T>
 class INode;
 
+template <typename T>
+class ITree;
+
 enum class AdditionalCondition {
 	BTree2Nodes
 };
@@ -22,6 +25,7 @@ protected:
 	virtual void add(INode<T>* root, INode<T>* to_add) = 0;
 	
 	friend class ITree<T>;
+	friend class INode<T>;
 
 };
 

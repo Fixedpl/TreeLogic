@@ -16,6 +16,7 @@ public:
 	BinaryTree();
 
 	INode<T>* add(const T& data);
+	INode<T>* add(const T& data, const std::string& path);
 
 };
 
@@ -23,8 +24,9 @@ public:
 
 template<typename T>
 BinaryTree<T>::BinaryTree()
-	:	m_default_adding_strategy(0.4f),
-		ITree<T>(&m_default_adding_strategy)
+:	
+m_default_adding_strategy(0.4f),
+ITree<T>(&m_default_adding_strategy)
 {
 }
 
@@ -32,6 +34,12 @@ template <typename T>
 INode<T>* BinaryTree<T>::add(const T& data)
 {
 	return this->_add(new BNode<T>(this->m_id_handler.pullId(), data));
+}
+
+template<typename T>
+INode<T>* BinaryTree<T>::add(const T& data, const std::string& path)
+{
+	return this->_add(new BNode<T>(data), path);
 }
 
 

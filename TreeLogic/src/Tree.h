@@ -14,6 +14,7 @@ public:
 	Tree();
 
 	INode<T>* add(const T& data);
+	INode<T>* add(const T& data, const std::string& path);
 
 };
 
@@ -28,6 +29,12 @@ Tree<T>::Tree()
 template <typename T>
 INode<T>* Tree<T>::add(const T& data) {
 	return this->_add(new Node<T>(this->m_id_handler.pullId(), data));;
+}
+
+template<typename T>
+INode<T>* Tree<T>::add(const T& data, const std::string& path)
+{
+	return this->_add(new Node<T>(data), path);
 }
 
 

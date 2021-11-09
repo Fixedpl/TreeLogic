@@ -12,8 +12,9 @@ class BNode : public INode<T>
 public:
 
 	BNode(const uint32_t& id, const T& data);
+	BNode(const T& data);
 
-	void addSonPtr(INode<T>* node);
+	bool addSonPtr(INode<T>* node);
 
 	void addSonPtrRandomly(INode<T>* node);
 
@@ -27,6 +28,12 @@ public:
 
 	uint32_t subtreeNodeCount();
 
+	INode<T>* getLeftSon();
+	INode<T>* getRightSon();
+
+	void setLeftSon(INode<T>* node);
+	void setRightSon(INode<T>* node);
+
 protected:
 
 	INode<T>* m_left_son = nullptr;
@@ -36,17 +43,32 @@ protected:
 
 template <typename T>
 BNode<T>::BNode(const uint32_t& id, const T& data)
-	:	INode<T>(id, data)
+:
+INode<T>(id, data)
+{
+}
+
+template<typename T>
+BNode<T>::BNode(const T& data)
+:
+INode<T>(0, data)
 {
 }
 
 template <typename T>
-void BNode<T>::addSonPtr(INode<T>* node)
+bool BNode<T>::addSonPtr(INode<T>* node)
 {
-	if (!m_left_son)
+	if (m_left_son && m_right_son) {
+		std::cout << "[ERROR] BNode.h: Couldn't add son because BNode already has 2 sons\n";
+		return false;
+	}
+	if (!m_left_son) {
 		m_left_son = node;
-	else
+	}
+	else {
 		m_right_son = node;
+	}
+	return true;
 }
 
 template <typename T>
@@ -112,5 +134,35 @@ uint32_t BNode<T>::subtreeNodeCount()
 	if(m_right_son)
 		count += m_right_son->subtreeNodeCount();
 	return count;
+}
+
+template<typename T>
+INode<T>* BNode<T>::getLeftSon()
+{
+	return m_left_son;
+}
+
+template<typename T>
+inline INode<T>* BNode<T>::getRightSon()
+{
+	return m_right_son;
+}
+
+template<typename T>
+void BNode<T>::setLeftSon(INode<T>* node)
+{
+	if (m_left_son) {
+		std::cout << "[WARNING] BNode.h: Binary node already has left. Node was overwritten\n";
+	}
+	m_left_son = node;
+}
+
+template<typename T>
+void BNode<T>::setRightSon(INode<T>* node)
+{
+	if (m_left_son) {
+		std::cout << "[WARNING] BNode.h: Binary node already has right son. Node was overwritten\n";
+	}
+	m_right_son = node;
 }
 
