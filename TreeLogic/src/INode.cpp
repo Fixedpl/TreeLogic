@@ -1,39 +1,39 @@
 #include "INode.h"
 
 
-BINode::BINode()
+INode::INode()
 	:
 	m_id(0),
 	m_father(nullptr)
 {
 }
 
-BINode::~BINode()
+INode::~INode()
 {
 }
 
 
-uint32_t BINode::getId()
+uint32_t INode::getId()
 {
 	return m_id;
 }
 
 
-void BINode::setId(const uint32_t& id)
+void INode::setId(const uint32_t& id)
 {
 	m_id = id;
 }
 
 
-BINode* BINode::getFatherAbstract()
+INode* INode::getFatherAbstract()
 {
 	return m_father;;
 }
 
-void BINode::setFather(BINode* node)
+void INode::setFather(INode* node)
 {
 	if (m_father) {
-		std::cout << "[WARNING] Father already exists. Node was overwritten\n";
+		std::cout << "[WARNING] Father already exists. TNode was overwritten\n";
 	}
 	m_father = node;
 }

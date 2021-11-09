@@ -7,9 +7,8 @@
 
 
 
-class BINode;
+class INode;
 
-class BITree;
 
 enum class AdditionalCondition {
 	BTree2Nodes
@@ -20,7 +19,7 @@ class IAddingStrategy
 {
 public:
 
-	virtual void add(BINode* root, BINode* to_add) = 0;
+	virtual void add(INode* root, INode* to_add) = 0;
 
 };
 
@@ -37,11 +36,11 @@ private:
 
 public:
 
-	void add(BINode* root, BINode* to_add);
+	void add(INode* root, INode* to_add);
 
 private:
 
-	bool additionalCheck(const AdditionalCondition& additional_condition, BINode* node);
+	bool additionalCheck(const AdditionalCondition& additional_condition, INode* node);
 
 protected:
 
@@ -65,7 +64,7 @@ private:
 
 public:
 
-	void add(BINode* root, BINode* to_add);
+	void add(INode* root, INode* to_add);
 
 public:
 

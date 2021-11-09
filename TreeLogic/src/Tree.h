@@ -3,14 +3,14 @@
 
 
 template <typename T>
-class Tree : public ITree<T>
+class Tree : public TITree<T>
 {
 public:
 
 	Tree();
 
-	INode<T>* add(const T& data);
-	INode<T>* add(const T& data, const std::string& path);
+	TINode<T>* add(const T& data);
+	TINode<T>* add(const T& data, const std::string& path);
 
 private:
 
@@ -23,20 +23,21 @@ private:
 
 template<typename T>
 Tree<T>::Tree()
-	: m_default_adding_strategy(0.3f),
-	  ITree<T>(&m_default_adding_strategy)
+: 
+m_default_adding_strategy(0.3f),
+TITree<T>(&m_default_adding_strategy)
 {
 }
 
 template <typename T>
-INode<T>* Tree<T>::add(const T& data) {
-	return dynamic_cast<INode<T>*>(this->_add(new Node<T>(this->m_id_handler.pullId(), data)));
+TINode<T>* Tree<T>::add(const T& data) {
+	return dynamic_cast<TINode<T>*>(this->_add(new TNode<T>(this->m_id_handler.pullId(), data)));
 }
 
 template<typename T>
-INode<T>* Tree<T>::add(const T& data, const std::string& path)
+TINode<T>* Tree<T>::add(const T& data, const std::string& path)
 {
-	return dynamic_cast<INode<T>*>(this->_add(new Node<T>(data), path));
+	return dynamic_cast<TINode<T>*>(this->_add(new TNode<T>(data), path));
 }
 
 

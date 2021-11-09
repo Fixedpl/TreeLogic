@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-class BINode;
+class INode;
 
 enum class FatherDirection {
 	NONE, LEFT, RIGHT
@@ -14,7 +14,7 @@ private:
 
 	void addSpaces(std::string& line, const uint32_t& spaces_amount);
 
-	void buildTreeSkeleton(BINode* root_node,
+	void buildTreeSkeleton(INode* root_node,
 						   std::string* tree_view,
 						   const uint32_t& size,
 						   const uint32_t& level = 0, 
@@ -22,11 +22,11 @@ private:
 
 	void fillMissingLines(std::string* tree_view, const uint32_t& size);
 
-	uint32_t findDiameter(BINode* root_node, const uint32_t& level = 1);
+	uint32_t findDiameter(INode* root_node, const uint32_t& level = 1);
 
 public:
 
-	void print(BINode* root_node);
+	void print(INode* root_node);
 
 };
 

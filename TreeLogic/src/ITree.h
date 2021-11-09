@@ -6,34 +6,33 @@
 #include "ITraversalStrategy.h"
 #include "PrettyPrintTree.h"
 
-class BINode;
 
-class BITree
+class ITree
 {
 public:
 
-	BITree(IAddingStrategy* default_adding_strategy);
+	ITree();
 
-	void remove(BINode* node);
+	void remove(INode* node);
 
-	void swapNodes(BINode* first_node, BINode* second_node);
+	void swapNodes(INode* first_node, INode* second_node);
 
 	void printToConsole();
 
 	void setAddingStrategy(IAddingStrategy* adding_strategy);
 
-	BINode* findNodeWithIDAbstract(const uint32_t& id, BINode* starting_node, const int32_t& depth_limit = -1);
+	INode* findNodeWithIDAbstract(const uint32_t& id, INode* starting_node, const int32_t& depth_limit = -1);
 
 protected:
 
-	BINode* _add(BINode* to_add);
-	BINode* _add(BINode* to_add, const std::string& path);
+	INode* _add(INode* to_add);
+	INode* _add(INode* to_add, const std::string& path);
 
 protected:
 
 	IDHandler m_id_handler;
 
-	BINode* m_root_node = nullptr;
+	INode* m_root_node = nullptr;
 
 	IAddingStrategy* m_current_adding_strategy = nullptr;
 
@@ -43,32 +42,32 @@ protected:
 
 
 template <typename T>
-class ITree : public BITree
+class TITree : virtual public ITree
 {
 public:
 
-	ITree(IAddingStrategy* default_adding_strategy);
+	TITree(IAddingStrategy* default_adding_strategy);
 
-	virtual ~ITree() {}
+	virtual ~TITree() {}
 
-	virtual INode<T>* add(const T& data) = 0;
+	virtual TINode<T>* add(const T& data) = 0;
 
 	// e.g:"0 1 4" will try to find node with id 0 on first level
 	// 1 on second 4 on third. if there is no node with id 4 it will
 	// be created. if it exists data will be overwritten
-	virtual INode<T>* add(const T& data, const std::string& path) = 0;
+	virtual TINode<T>* add(const T& data, const std::string& path) = 0;
 
-	void search(const T& data, std::vector<INode<T>*>& vector_to_fill);
+	void search(const T& data, std::vector<TINode<T>*>& vector_to_fill);
 
-	void traverse(std::vector<INode<T>*>& vector_to_fill);
+	void traverse(std::vector<TINode<T>*>& vector_to_fill);
 
-	void swapData(INode<T>* first_node, INode<T>* second_node);
+	void swapData(TINode<T>* first_node, TINode<T>* second_node);
 
 	void setTraversingStrategy(ITraversalStrategy<T>* traversing_strategy);
 
-	INode<T>* findNodeWithID(const uint32_t& id, INode<T>* starting_node = m_root_node, const int32_t& depth_limit = -1);
+	TINode<T>* findNodeWithID(const uint32_t& id, TINode<T>* starting_node = m_root_node, const int32_t& depth_limit = -1);
 
-	INode<T>* getRootNode();
+	TINode<T>* getRootNode();
 
 protected:
 
@@ -80,18 +79,18 @@ protected:
 
 
 template <typename T>
-ITree<T>::ITree(IAddingStrategy* default_adding_strategy)
+TITree<T>::TITree(IAddingStrategy* default_adding_strategy)
 :
-BITree(default_adding_strategy),
 m_current_traversing_strategy(&m_default_traversing_strategy)
 {
+	m_current_adding_strategy = default_adding_strategy;
 }
 
 template<typename T>
-void ITree<T>::search(const T& data, std::vector<INode<T>*>& vector_to_fill)
+void TITree<T>::search(const T& data, std::vector<TINode<T>*>& vector_to_fill)
 {
 	if (m_root_node != nullptr) {
-		m_current_traversing_strategy->search(dynamic_cast<INode<T>*>(m_root_node), data, vector_to_fill);
+		m_current_traversing_strategy->search(dynamic_cast<TINode<T>*>(m_root_node), data, vector_to_fill);
 	}
 	else {
 		std::cout << "[WARNING]Tree.h: Trying to search empty tree\n";
@@ -99,10 +98,10 @@ void ITree<T>::search(const T& data, std::vector<INode<T>*>& vector_to_fill)
 }
 
 template<typename T>
-void ITree<T>::traverse(std::vector<INode<T>*>& vector_to_fill)
+void TITree<T>::traverse(std::vector<TINode<T>*>& vector_to_fill)
 {
 	if (m_root_node != nullptr) {
-		m_current_traversing_strategy->traverse(dynamic_cast<INode<T>*>(m_root_node), vector_to_fill);
+		m_current_traversing_strategy->traverse(dynamic_cast<TINode<T>*>(m_root_node), vector_to_fill);
 	}
 	else {
 		std::cout << "[WARNING]Tree.h: Trying to traverse empty tree\n";
@@ -110,7 +109,7 @@ void ITree<T>::traverse(std::vector<INode<T>*>& vector_to_fill)
 }
 
 template <typename T>
-void ITree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
+void TITree<T>::swapData(TINode<T>* first_node, TINode<T>* second_node)
 {
 	T buffor = first_node->getData();
 
@@ -119,14 +118,14 @@ void ITree<T>::swapData(INode<T>* first_node, INode<T>* second_node)
 }
 
 template <typename T>
-void ITree<T>::setTraversingStrategy(ITraversalStrategy<T>* traversing_strategy)
+void TITree<T>::setTraversingStrategy(ITraversalStrategy<T>* traversing_strategy)
 {
 	m_current_traversing_strategy = traversing_strategy;
 }
 
 // Nodes have unique ids
 template<typename T>
-INode<T>* ITree<T>::findNodeWithID(const uint32_t& id, INode<T>* starting_node, const int32_t& depth_limit)
+TINode<T>* TITree<T>::findNodeWithID(const uint32_t& id, TINode<T>* starting_node, const int32_t& depth_limit)
 {
 	if (!starting_node) {
 		return nullptr;
@@ -136,7 +135,7 @@ INode<T>* ITree<T>::findNodeWithID(const uint32_t& id, INode<T>* starting_node, 
 	}
 	if (depth_limit) {
 		for (auto& son : starting_node->getSons()) {
-			INode<T>* return_value = findNodeWithID(id, son, depth_limit - 1);
+			TINode<T>* return_value = findNodeWithID(id, son, depth_limit - 1);
 			if (return_value) {
 				return return_value;
 			}
@@ -146,9 +145,9 @@ INode<T>* ITree<T>::findNodeWithID(const uint32_t& id, INode<T>* starting_node, 
 }
 
 template<typename T>
-INode<T>* ITree<T>::getRootNode()
+TINode<T>* TITree<T>::getRootNode()
 {
-	return dynamic_cast<INode<T>*>(m_root_node);
+	return dynamic_cast<TINode<T>*>(m_root_node);
 }
 
 // This should be improved. Currently it only works on valid input.

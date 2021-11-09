@@ -8,10 +8,10 @@
 // Try to add child of root but no root
 bool regular_tree_path_adding_0()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	TEST_ERROR;
-	INode<std::string>* node = regular_tree->add("First node", "0 1");
+	TINode<std::string>* node = regular_tree->add("First node", "0 1");
 
 	delete regular_tree;
 	return node == nullptr;
@@ -20,7 +20,7 @@ bool regular_tree_path_adding_0()
 // Add as root
 bool regular_tree_path_adding_1()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 
@@ -33,7 +33,7 @@ bool regular_tree_path_adding_1()
 // Add as root when root already exists with different id
 bool regular_tree_path_adding_2()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 
@@ -49,7 +49,7 @@ bool regular_tree_path_adding_2()
 // Add as root when root already exists with the same id
 bool regular_tree_path_adding_3()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 	TEST_WARNING;
@@ -64,12 +64,12 @@ bool regular_tree_path_adding_3()
 // Add root and then child
 bool regular_tree_path_adding_4()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 	regular_tree->add("Second node", "0 1");
 
-	INode<std::string>* it = regular_tree->getRootNode();
+	TINode<std::string>* it = regular_tree->getRootNode();
 	it = it->getSons()[0];
 
 	uint32_t id = it->getId();
@@ -81,11 +81,11 @@ bool regular_tree_path_adding_4()
 // Add root and then wrong path
 bool regular_tree_path_adding_5()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 	TEST_ERROR;
-	INode<std::string>* node = regular_tree->add("Second node", "1 2");
+	TINode<std::string>* node = regular_tree->add("Second node", "1 2");
 
 	delete regular_tree;
 	return node == nullptr;
@@ -94,11 +94,11 @@ bool regular_tree_path_adding_5()
 // Add root and then wrong path
 bool regular_tree_path_adding_6()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 	TEST_ERROR;
-	INode<std::string>* node = regular_tree->add("Second node", "0 1 2");
+	TINode<std::string>* node = regular_tree->add("Second node", "0 1 2");
 
 	delete regular_tree;
 	return node == nullptr;
@@ -107,14 +107,14 @@ bool regular_tree_path_adding_6()
 // Add root and then overwrite with the same id
 bool regular_tree_path_adding_7()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 	regular_tree->add("Second node", "0 1");
 	TEST_WARNING;
 	regular_tree->add("Overwrite node", "0 1");
 
-	INode<std::string>* node = regular_tree->getRootNode();
+	TINode<std::string>* node = regular_tree->getRootNode();
 	
 	std::string value = node->getSons()[0]->getData();
 
@@ -125,13 +125,13 @@ bool regular_tree_path_adding_7()
 // Add root and 2 children
 bool regular_tree_path_adding_8()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 	regular_tree->add("Second node", "0 1");
 	regular_tree->add("Third node", "0 2");
 
-	INode<std::string>* node = regular_tree->getRootNode();
+	TINode<std::string>* node = regular_tree->getRootNode();
 
 	std::string value = node->getSons()[1]->getData();
 
@@ -142,14 +142,14 @@ bool regular_tree_path_adding_8()
 // Add root and 3 children
 bool regular_tree_path_adding_9()
 {
-	ITree<std::string>* regular_tree = new Tree<std::string>();
+	TITree<std::string>* regular_tree = new Tree<std::string>();
 
 	regular_tree->add("First node", "0");
 	regular_tree->add("Second node", "0 1");
 	regular_tree->add("Third node", "0 2");
 	regular_tree->add("Fourth node", "0 3");
 
-	INode<std::string>* node = regular_tree->getRootNode();
+	TINode<std::string>* node = regular_tree->getRootNode();
 
 	std::string value = node->getSons()[2]->getData();
 
@@ -160,13 +160,13 @@ bool regular_tree_path_adding_9()
 // Try to add more than 2 nodes to 1 node
 bool binary_tree_path_adding_0()
 {
-	ITree<std::string>* binary_tree = new BinaryTree<std::string>();
+	TITree<std::string>* binary_tree = new BinaryTree<std::string>();
 
 	binary_tree->add("First node", "0");
 	binary_tree->add("Second node", "0 1");
 	binary_tree->add("Third node", "0 2");
 	TEST_ERROR;
-	INode<std::string>* node = binary_tree->add("Fourth node", "0 3");
+	TINode<std::string>* node = binary_tree->add("Fourth node", "0 3");
 
 
 	delete binary_tree;

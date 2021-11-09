@@ -17,13 +17,11 @@ uint32_t first_number_to_int(const std::string& string, const uint32_t& starting
 	return next_space_index;
 }
 
-BITree::BITree(IAddingStrategy* default_adding_strategy)
-:
-m_current_adding_strategy(default_adding_strategy)
+ITree::ITree()
 {
 }
 
-void BITree::remove(BINode* node)
+void ITree::remove(INode* node)
 {
 	m_id_handler.pushId(node->getId());
 
@@ -42,7 +40,7 @@ void BITree::remove(BINode* node)
 }
 
 
-void BITree::swapNodes(BINode* first_node, BINode* second_node)
+void ITree::swapNodes(INode* first_node, INode* second_node)
 {
 	if (first_node == m_root_node || second_node == m_root_node) {
 		std::cout << "[ERROR]Tree.h: Can't swap root node";
@@ -52,28 +50,28 @@ void BITree::swapNodes(BINode* first_node, BINode* second_node)
 	first_node->getFatherAbstract()->swapSonPtrs(first_node, second_node);
 	second_node->getFatherAbstract()->swapSonPtrs(second_node, first_node);
 
-	BINode* buffor = first_node->getFatherAbstract();
+	INode* buffor = first_node->getFatherAbstract();
 	first_node->setFather(second_node->getFatherAbstract());
 	second_node->setFather(buffor);
 }
 
-void BITree::printToConsole()
+void ITree::printToConsole()
 {
 	if (m_root_node != nullptr) {
 		m_tree_printer.print(m_root_node);
 	}
 	else {
-		std::cout << "[WARNING]ITree.h: Trying to print empty tree\n";
+		std::cout << "[WARNING]TITree.h: Trying to print empty tree\n";
 	}
 }
 
-void BITree::setAddingStrategy(IAddingStrategy* adding_strategy)
+void ITree::setAddingStrategy(IAddingStrategy* adding_strategy)
 {
 	m_current_adding_strategy = adding_strategy;
 }
 
 
-BINode* BITree::findNodeWithIDAbstract(const uint32_t& id, BINode* starting_node, const int32_t& depth_limit)
+INode* ITree::findNodeWithIDAbstract(const uint32_t& id, INode* starting_node, const int32_t& depth_limit)
 {
 	if (!starting_node) {
 		return nullptr;
@@ -83,7 +81,7 @@ BINode* BITree::findNodeWithIDAbstract(const uint32_t& id, BINode* starting_node
 	}
 	if (depth_limit) {
 		for (auto& son : starting_node->getSonsAbstract()) {
-			BINode* return_value = findNodeWithIDAbstract(id, son, depth_limit - 1);
+			INode* return_value = findNodeWithIDAbstract(id, son, depth_limit - 1);
 			if (return_value) {
 				return return_value;
 			}
@@ -93,7 +91,7 @@ BINode* BITree::findNodeWithIDAbstract(const uint32_t& id, BINode* starting_node
 }
 
 
-BINode* BITree::_add(BINode* to_add)
+INode* ITree::_add(INode* to_add)
 {
 	if (m_root_node == nullptr) {
 		m_root_node = to_add;
@@ -105,10 +103,10 @@ BINode* BITree::_add(BINode* to_add)
 }
 
 
-BINode* BITree::_add(BINode* to_add, const std::string& path)
+INode* ITree::_add(INode* to_add, const std::string& path)
 {
 	if (!path.size()) {
-		std::cout << "[ERROR] ITree.h: Empty path passed when adding node. Abandoning insertion\n";
+		std::cout << "[ERROR] TITree.h: Empty path passed when adding node. Abandoning insertion\n";
 		return nullptr;
 	}
 
@@ -118,7 +116,7 @@ BINode* BITree::_add(BINode* to_add, const std::string& path)
 	to_add->setId(number_from_string);
 	if (!m_root_node) {
 		if (current_index < path.size()) {
-			std::cout << "[ERROR] ITree.h: Tree has no root but more than 1 nodes included in path. Abandoning insertion\n";
+			std::cout << "[ERROR] TITree.h: Tree has no root but more than 1 nodes included in path. Abandoning insertion\n";
 			return nullptr;
 		}
 		m_root_node = to_add;
@@ -126,19 +124,19 @@ BINode* BITree::_add(BINode* to_add, const std::string& path)
 	}
 	// Overwrite root node
 	if (current_index == path.size()) {
-		std::cout << "[WARNING] ITree.h: Node with this id already exists. Node was overwritten\n";
+		std::cout << "[WARNING] TITree.h: TNode with this id already exists. TNode was overwritten\n";
 		delete m_root_node;
 		m_root_node = to_add;
 		return to_add;
 	}
 	if (m_root_node->getId() != number_from_string) {
-		std::cout << "[ERROR] ITree.h: Couldn't find node with id " << number_from_string << ". Abandoning insertion\n";
+		std::cout << "[ERROR] TITree.h: Couldn't find node with id " << number_from_string << ". Abandoning insertion\n";
 		return nullptr;
 	}
 
 	current_index++;
-	BINode* current_node = m_root_node;
-	BINode* previous_node = current_node;
+	INode* current_node = m_root_node;
+	INode* previous_node = current_node;
 	while (current_index < path.size()) {
 		number_from_string = 0;
 
@@ -146,14 +144,14 @@ BINode* BITree::_add(BINode* to_add, const std::string& path)
 
 		previous_node = current_node;
 		if ((current_node = findNodeWithIDAbstract(number_from_string, current_node, 1)) == nullptr && current_index != path.size()) {
-			std::cout << "[ERROR] ITree.h: Couldn't find node with id " << number_from_string << ". Abandoning insertion\n";
+			std::cout << "[ERROR] TITree.h: Couldn't find node with id " << number_from_string << ". Abandoning insertion\n";
 			return nullptr;
 		}
 		current_index++;
 	}
 	to_add->setId(number_from_string);
 	if (current_node) {
-		std::cout << "[WARNING] ITree.h: Node with this id already exists. Node was overwritten\n";
+		std::cout << "[WARNING] TITree.h: TNode with this id already exists. TNode was overwritten\n";
 		previous_node->swapSonPtrs(current_node, to_add);
 		delete current_node;
 	}

@@ -8,7 +8,7 @@ void PrettyPrintTree::addSpaces(std::string& line, const uint32_t& spaces_amount
 		line += " ";
 }
 
-void PrettyPrintTree::buildTreeSkeleton(BINode* root_node,
+void PrettyPrintTree::buildTreeSkeleton(INode* root_node,
 	std::string* tree_view,
 	const uint32_t& size,
 	const uint32_t& level,
@@ -29,7 +29,7 @@ void PrettyPrintTree::buildTreeSkeleton(BINode* root_node,
 	*	and then traverse the tree with In Order performing
 	*	actions on each node. Basically rendering tree from left to right
 	* ***************************************************************/
-	std::vector<BINode*> sons = root_node->getSonsAbstract();
+	std::vector<INode*> sons = root_node->getSonsAbstract();
 	uint32_t sons_count = root_node->sonsCount();
 	uint32_t left_sons = (sons_count + 1) / 2;
 
@@ -123,7 +123,7 @@ void PrettyPrintTree::fillMissingLines(std::string* tree_view, const uint32_t& s
 	}
 }
 
-uint32_t PrettyPrintTree::findDiameter(BINode* root_node, const uint32_t& level /* = 1 */)
+uint32_t PrettyPrintTree::findDiameter(INode* root_node, const uint32_t& level /* = 1 */)
 {
 	uint32_t highest = level;
 	for (auto& son : root_node->getSonsAbstract()) {
@@ -133,7 +133,7 @@ uint32_t PrettyPrintTree::findDiameter(BINode* root_node, const uint32_t& level 
 	return highest;
 }
 
-void PrettyPrintTree::print(BINode* root_node)
+void PrettyPrintTree::print(INode* root_node)
 {
 	/********************************************************************
 	*   First it finds tree diameter to know how many levels

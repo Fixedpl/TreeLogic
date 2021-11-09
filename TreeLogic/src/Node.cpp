@@ -5,18 +5,18 @@
 
 
 
-BNode::BNode()
+Node::Node()
 {
 }
 
-bool BNode::addSonPtr(BINode* node)
+bool Node::addSonPtr(INode* node)
 {
 	node->setFather(this);
 	m_sons.push_back(node);
 	return true;
 }
 
-void BNode::addSonPtrRandomly(BINode* node)
+void Node::addSonPtrRandomly(INode* node)
 {
 	std::uniform_int_distribution<std::mt19937::result_type> random_int(0, m_sons.size());
 	auto iterator = m_sons.begin();
@@ -26,12 +26,12 @@ void BNode::addSonPtrRandomly(BINode* node)
 	m_sons.insert(iterator, node);
 }
 
-void BNode::removeSonPtr(BINode* node)
+void Node::removeSonPtr(INode* node)
 {
 	m_sons.erase(std::find(m_sons.begin(), m_sons.end(), node));
 }
 
-void BNode::swapSonPtrs(BINode* son, BINode* replacement)
+void Node::swapSonPtrs(INode* son, INode* replacement)
 {
 	for (int i = 0; i < m_sons.size(); ++i) {
 		if (son == m_sons[i]) {
@@ -41,12 +41,12 @@ void BNode::swapSonPtrs(BINode* son, BINode* replacement)
 	}
 }
 
-uint32_t BNode::sonsCount()
+uint32_t Node::sonsCount()
 {
 	return m_sons.size();
 }
 
-uint32_t BNode::subtreeNodeCount()
+uint32_t Node::subtreeNodeCount()
 {
 	uint32_t count = 0;
 	for (auto& node : m_sons) {
@@ -55,7 +55,7 @@ uint32_t BNode::subtreeNodeCount()
 	return count;
 }
 
-std::vector<BINode*> BNode::getSonsAbstract()
+std::vector<INode*> Node::getSonsAbstract()
 {
 	return m_sons;
 }

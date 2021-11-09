@@ -2,15 +2,15 @@
 
 
 
-BBBNode::BBBNode()
+BNode::BNode()
 {
 }
 
 
-bool BBBNode::addSonPtr(BINode* node)
+bool BNode::addSonPtr(INode* node)
 {
 	if (m_left_son && m_right_son) {
-		std::cout << "[ERROR] BBNode.h: Couldn't add son because BBNode already has 2 sons\n";
+		std::cout << "[ERROR] TBNode.h: Couldn't add son because TBNode already has 2 sons\n";
 		return false;
 	}
 	if (!m_left_son) {
@@ -22,7 +22,7 @@ bool BBBNode::addSonPtr(BINode* node)
 	return true;
 }
 
-void BBBNode::addSonPtrRandomly(BINode* node)
+void BNode::addSonPtrRandomly(INode* node)
 {
 	std::uniform_real_distribution<float> random_float(0.0f, 1.0f);
 	if (!m_left_son && !m_right_son) {
@@ -36,7 +36,7 @@ void BBBNode::addSonPtrRandomly(BINode* node)
 	}
 }
 
-void BBBNode::removeSonPtr(BINode* node)
+void BNode::removeSonPtr(INode* node)
 {
 	if (m_left_son == node)
 		m_left_son = nullptr;
@@ -45,7 +45,7 @@ void BBBNode::removeSonPtr(BINode* node)
 }
 
 
-void BBBNode::swapSonPtrs(BINode* son, BINode* replacement)
+void BNode::swapSonPtrs(INode* son, INode* replacement)
 {
 	if (m_left_son == son)
 		m_left_son = replacement;
@@ -53,7 +53,7 @@ void BBBNode::swapSonPtrs(BINode* son, BINode* replacement)
 		m_right_son = replacement;
 }
 
-uint32_t BBBNode::sonsCount()
+uint32_t BNode::sonsCount()
 {
 	if (m_left_son && m_right_son)
 		return 2;
@@ -62,7 +62,7 @@ uint32_t BBBNode::sonsCount()
 	return 1;
 }
 
-uint32_t BBBNode::subtreeNodeCount()
+uint32_t BNode::subtreeNodeCount()
 {
 	uint32_t count = 1;
 	if (m_left_son)
@@ -73,25 +73,25 @@ uint32_t BBBNode::subtreeNodeCount()
 }
 
 
-void BBBNode::setLeftSon(BINode* node)
+void BNode::setLeftSon(INode* node)
 {
 	if (m_left_son) {
-		std::cout << "[WARNING] BBNode.h: Binary node already has left. Node was overwritten\n";
+		std::cout << "[WARNING] TBNode.h: Binary node already has left. TNode was overwritten\n";
 	}
 	m_left_son = node;
 }
 
-void BBBNode::setRightSon(BINode* node)
+void BNode::setRightSon(INode* node)
 {
 	if (m_left_son) {
-		std::cout << "[WARNING] BBNode.h: Binary node already has right son. Node was overwritten\n";
+		std::cout << "[WARNING] TBNode.h: Binary node already has right son. TNode was overwritten\n";
 	}
 	m_right_son = node;
 }
 
-std::vector<BINode*> BBBNode::getSonsAbstract()
+std::vector<INode*> BNode::getSonsAbstract()
 {
-	std::vector<BINode*> sons;
+	std::vector<INode*> sons;
 	if (m_left_son) {
 		sons.push_back(m_left_son);
 	}

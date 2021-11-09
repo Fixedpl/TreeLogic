@@ -7,87 +7,87 @@
 #include "Node.h"
 
 
-class BBBNode : virtual public BINode
+class BNode : virtual public INode
 {
 public:
 
-	BBBNode();
+	BNode();
 
-	bool addSonPtr(BINode* node);
+	bool addSonPtr(INode* node);
 
-	void addSonPtrRandomly(BINode* node);
+	void addSonPtrRandomly(INode* node);
 
-	void removeSonPtr(BINode* node);
+	void removeSonPtr(INode* node);
 
-	void swapSonPtrs(BINode* son, BINode* replacement);
+	void swapSonPtrs(INode* son, INode* replacement);
 
 	uint32_t sonsCount();
 
 	uint32_t subtreeNodeCount();
 
-	void setLeftSon(BINode* node);
-	void setRightSon(BINode* node);
+	void setLeftSon(INode* node);
+	void setRightSon(INode* node);
 
-	std::vector<BINode*> getSonsAbstract();
+	std::vector<INode*> getSonsAbstract();
 
 protected:
 
-	BINode* m_left_son = nullptr;
-	BINode* m_right_son = nullptr;
+	INode* m_left_son = nullptr;
+	INode* m_right_son = nullptr;
 
 };
 
 
 
 template <typename T>
-class BBNode : public INode<T>, public BBBNode
+class TBNode : public TINode<T>, public BNode
 {
 public:
 
-	BBNode(const uint32_t& id, const T& data);
-	BBNode(const T& data);
+	TBNode(const uint32_t& id, const T& data);
+	TBNode(const T& data);
 
-	std::vector<INode<T>*> getSons();
+	std::vector<TINode<T>*> getSons();
 
-	INode<T>* getLeftSon();
-	INode<T>* getRightSon();
+	TINode<T>* getLeftSon();
+	TINode<T>* getRightSon();
 
 };
 
 template <typename T>
-BBNode<T>::BBNode(const uint32_t& id, const T& data)
+TBNode<T>::TBNode(const uint32_t& id, const T& data)
 :
-INode<T>(id, data)
+TINode<T>(id, data)
 {
 }
 
 template<typename T>
-BBNode<T>::BBNode(const T& data)
+TBNode<T>::TBNode(const T& data)
 :
-INode<T>(0, data)
+TINode<T>(0, data)
 {
 }
 
 template <typename T>
-std::vector<INode<T>*> BBNode<T>::getSons()
+std::vector<TINode<T>*> TBNode<T>::getSons()
 {
-	std::vector<INode<T>*> sons;
+	std::vector<TINode<T>*> sons;
 	if (this->m_left_son != nullptr)
-		sons.push_back(dynamic_cast<INode<T>*>(this->m_left_son));
+		sons.push_back(dynamic_cast<TINode<T>*>(this->m_left_son));
 	if (m_right_son != nullptr)
-		sons.push_back(dynamic_cast<INode<T>*>(this->m_right_son));
+		sons.push_back(dynamic_cast<TINode<T>*>(this->m_right_son));
 
 	return sons;
 }
 
 template<typename T>
-INode<T>* BBNode<T>::getLeftSon()
+TINode<T>* TBNode<T>::getLeftSon()
 {
 	return this->m_left_son;
 }
 
 template<typename T>
-inline INode<T>* BBNode<T>::getRightSon()
+inline TINode<T>* TBNode<T>::getRightSon()
 {
 	return this->m_right_son;
 }

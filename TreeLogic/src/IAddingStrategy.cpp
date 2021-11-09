@@ -1,7 +1,7 @@
 #include "IAddingStrategy.h"
 #include "Node.h"
 
-bool RandomAddingStrategyRegularTree::additionalCheck(const AdditionalCondition& additional_condition, BINode* node)
+bool RandomAddingStrategyRegularTree::additionalCheck(const AdditionalCondition& additional_condition, INode* node)
 {
 	if (std::find(m_additional_conditions.begin(), m_additional_conditions.end(), additional_condition) != m_additional_conditions.end()) {
 		switch (additional_condition) {
@@ -30,7 +30,7 @@ RandomAddingStrategyRegularTree::RandomAddingStrategyRegularTree(const float& ch
 	srand(time(0));
 }
 
-void RandomAddingStrategyRegularTree::add(BINode* root, BINode* to_add)
+void RandomAddingStrategyRegularTree::add(INode* root, INode* to_add)
 {
 	std::uniform_real_distribution<float> random_float(0.0f, 1.0f);
 	// Adding as son of root
@@ -40,7 +40,7 @@ void RandomAddingStrategyRegularTree::add(BINode* root, BINode* to_add)
 	}
 	else {
 		// Adding deeper in the tree
-		std::vector<BINode*> sons = root->getSonsAbstract();
+		std::vector<INode*> sons = root->getSonsAbstract();
 		std::uniform_int_distribution<std::mt19937::result_type> random_int(0, sons.size() - 1);
 		add(sons[random_int(m_rng)], to_add);
 	}
@@ -57,7 +57,7 @@ BalancedAddingStrategyRegularTree::BalancedAddingStrategyRegularTree(const uint3
 {
 }
 
-void BalancedAddingStrategyRegularTree::add(BINode* root, BINode* to_add)
+void BalancedAddingStrategyRegularTree::add(INode* root, INode* to_add)
 {
 	// Adding as son of root
 	if (root->sonsCount() < m_max_sons_per_node) {
@@ -65,7 +65,7 @@ void BalancedAddingStrategyRegularTree::add(BINode* root, BINode* to_add)
 	}
 	else {
 		// Adding deeper in the tree
-		BINode* smallest_subtree_node = root->getSonsAbstract()[0];
+		INode* smallest_subtree_node = root->getSonsAbstract()[0];
 		for (auto& node : root->getSonsAbstract()) {
 			if (node->subtreeNodeCount() < smallest_subtree_node->subtreeNodeCount())
 				smallest_subtree_node = node;

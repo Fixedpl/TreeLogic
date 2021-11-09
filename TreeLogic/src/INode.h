@@ -7,39 +7,39 @@
 
 
 
-class BINode
+class INode
 {
 public:
 
-	BINode();
+	INode();
 
-	virtual ~BINode();
+	virtual ~INode();
 
-	virtual bool addSonPtr(BINode* node) = 0;
+	virtual bool addSonPtr(INode* node) = 0;
 
-	virtual void addSonPtrRandomly(BINode* node) = 0;
+	virtual void addSonPtrRandomly(INode* node) = 0;
 
-	virtual void removeSonPtr(BINode* node) = 0;
+	virtual void removeSonPtr(INode* node) = 0;
 
-	virtual void swapSonPtrs(BINode* son, BINode* replacement) = 0;
+	virtual void swapSonPtrs(INode* son, INode* replacement) = 0;
 
 	virtual uint32_t sonsCount() = 0;
 
 	virtual uint32_t subtreeNodeCount() = 0;
 
-	virtual std::vector<BINode*> getSonsAbstract() = 0;
+	virtual std::vector<INode*> getSonsAbstract() = 0;
 
 	uint32_t getId();
 	void setId(const uint32_t& id);
 
-	BINode* getFatherAbstract();
-	void setFather(BINode* node);
+	INode* getFatherAbstract();
+	void setFather(INode* node);
 
 protected:
 
 	uint32_t m_id;
 
-	BINode* m_father;
+	INode* m_father;
 
 	std::random_device m_random_device;
 	std::mt19937 m_rng;
@@ -48,17 +48,17 @@ protected:
 
 
 template <typename T>
-class INode : virtual public BINode
+class TINode : virtual public INode
 {
 public:
 
-	INode(const uint32_t& id, const T& data);
+	TINode(const uint32_t& id, const T& data);
 
-	virtual ~INode();
+	virtual ~TINode();
 
-	virtual std::vector<INode<T>*> getSons() = 0;
+	virtual std::vector<TINode<T>*> getSons() = 0;
 
-	INode<T>* getFather();
+	TINode<T>* getFather();
 
 	inline T getData();
 
@@ -72,7 +72,7 @@ protected:
 };
 
 template <typename T>
-INode<T>::INode(const uint32_t& id, const T& data)
+TINode<T>::TINode(const uint32_t& id, const T& data)
 :
 m_data(data)
 {
@@ -80,25 +80,25 @@ m_data(data)
 }
 
 template<typename T>
-INode<T>::~INode()
+TINode<T>::~TINode()
 {
 }
 
 
 template<typename T>
-INode<T>* INode<T>::getFather()
+TINode<T>* TINode<T>::getFather()
 {
-	return dynamic_cast<INode<T>*>(this->m_father);
+	return dynamic_cast<TINode<T>*>(this->m_father);
 }
 
 template<typename T>
-T INode<T>::getData()
+T TINode<T>::getData()
 {
 	return m_data;
 }
 
 template<typename T>
-void INode<T>::setData(const T& data)
+void TINode<T>::setData(const T& data)
 {
 	m_data = data;
 }

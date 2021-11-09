@@ -8,64 +8,64 @@
 #include "INode.h"
 
 
-class BNode : virtual public BINode
+class Node : virtual public INode
 {
 public:
 
-	BNode();
+	Node();
 
-	bool addSonPtr(BINode* node);
+	bool addSonPtr(INode* node);
 
-	void addSonPtrRandomly(BINode* node);
+	void addSonPtrRandomly(INode* node);
 
-	void removeSonPtr(BINode* node);
+	void removeSonPtr(INode* node);
 
-	void swapSonPtrs(BINode* son, BINode* replacement);
+	void swapSonPtrs(INode* son, INode* replacement);
 
 	uint32_t sonsCount();
 
 	uint32_t subtreeNodeCount();
 
-	std::vector<BINode*> getSonsAbstract();
+	std::vector<INode*> getSonsAbstract();
 
 protected:
 
-	std::vector<BINode*> m_sons;
+	std::vector<INode*> m_sons;
 
 };
 
 template <typename T>
-class Node : public BNode, public INode<T>
+class TNode : public Node, public TINode<T>
 {
 public:
 
-	Node(const uint32_t& id, const T& data);
-	Node(const T& data);
+	TNode(const uint32_t& id, const T& data);
+	TNode(const T& data);
 
-	std::vector<INode<T>*> getSons();
+	std::vector<TINode<T>*> getSons();
 
 };
 
 template <typename T>
-Node<T>::Node(const uint32_t& id, const T& data)
+TNode<T>::TNode(const uint32_t& id, const T& data)
 :
-INode<T>(id, data)
+TINode<T>(id, data)
 {
 }
 
 template<typename T>
-Node<T>::Node(const T& data)
+TNode<T>::TNode(const T& data)
 :
-INode<T>(0, data)
+TINode<T>(0, data)
 {
 }
 
 template<typename T>
-std::vector<INode<T>*> Node<T>::getSons()
+std::vector<TINode<T>*> TNode<T>::getSons()
 {
-	std::vector<INode<T>*> final_vector;
+	std::vector<TINode<T>*> final_vector;
 	for (auto& son : m_sons) {
-		final_vector.push_back(dynamic_cast<INode<T>*>(son));
+		final_vector.push_back(dynamic_cast<TINode<T>*>(son));
 	}
 	return final_vector;
 }
