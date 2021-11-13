@@ -2,11 +2,13 @@
 #include "path_adding.h"
 #include "tree_diameter.h"
 
-
-int main()
+namespace tl
 {
-    path_adding_tests();
-    tree_diameter_tests();
+    int main()
+    {
+        path_adding_tests();
+        tree_diameter_tests();
 
-    return 0;
+        return 0;
+    }
 }

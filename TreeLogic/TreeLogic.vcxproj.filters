@@ -45,9 +45,6 @@
     <ClCompile Include="src\BinaryTree.cpp">
       <Filter>Pliki �r�d�owe</Filter>
     </ClCompile>
-    <ClCompile Include="tests\main.cpp">
-      <Filter>Pliki �r�d�owe</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ITree.h">
@@ -78,15 +75,6 @@
       <Filter>Pliki nag��wkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\BinaryTree.h">
-      <Filter>Pliki nag��wkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\path_adding.h">
-      <Filter>Pliki nag��wkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\tree_diameter.h">
-      <Filter>Pliki nag��wkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\test_macros.h">
       <Filter>Pliki nag��wkowe</Filter>
     </ClInclude>
   </ItemGroup>

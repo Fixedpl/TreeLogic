@@ -2,32 +2,36 @@
 #include <iostream>
 #include <vector>
 
-class INode;
-
-enum class FatherDirection {
-	NONE, LEFT, RIGHT
-};
-
-class PrettyPrintTree
+namespace tl
 {
-private:
+	class INode;
 
-	void addSpaces(std::string& line, const uint32_t& spaces_amount);
+	enum class FatherDirection {
+		NONE, LEFT, RIGHT
+	};
 
-	void buildTreeSkeleton(INode* root_node,
-						   std::string* tree_view,
-						   const uint32_t& size,
-						   const uint32_t& level = 0, 
-						   const FatherDirection& father_direction = FatherDirection::NONE);
+	class PrettyPrintTree
+	{
+	private:
 
-	void fillMissingLines(std::string* tree_view, const uint32_t& size);
+		void addSpaces(std::string& line, const uint32_t& spaces_amount);
 
-	uint32_t findDiameter(INode* root_node, const uint32_t& level = 1);
+		void buildTreeSkeleton(INode* root_node,
+			std::string* tree_view,
+			const uint32_t& size,
+			const uint32_t& level = 0,
+			const FatherDirection& father_direction = FatherDirection::NONE);
 
-public:
+		void fillMissingLines(std::string* tree_view, const uint32_t& size);
 
-	void print(INode* root_node);
+		uint32_t findDiameter(INode* root_node, const uint32_t& level = 1);
 
-};
+	public:
+
+		void print(INode* root_node);
+
+	};
+}
+
 
 
