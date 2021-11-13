@@ -14,19 +14,23 @@ enum class AddCondition { NO_CONDITION, SAME_DATA };
 template <typename T>
 class ITraversalStrategy
 {
+public:
+
+	ITraversalStrategy(const AddCondition& add_condition);
+
+	virtual void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill) = 0;
+
+	void traverse(TINode<T>* root, std::vector<TINode<T>*>& vector_to_fill);
+
 protected:
 
 	void add(TINode<T>* root, 
 			 const T& data, 
-			 std::vector<TINode<T>*>& vector_to_fill, 
-			 const AddCondition& add_condition);
+			 std::vector<TINode<T>*>& vector_to_fill);
 
 public:
 
-	virtual void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill,
-					    const AddCondition& add_condition = AddCondition::SAME_DATA) = 0;
-
-	void traverse(TINode<T>* root, std::vector<TINode<T>*>& vector_to_fill);
+	AddCondition m_add_condition;
 
 };
 
@@ -35,8 +39,9 @@ class PreOrderTraversal : public ITraversalStrategy<T>
 {
 public:
 
-	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill,
-		const AddCondition& add_condition = AddCondition::SAME_DATA);
+	PreOrderTraversal(const AddCondition& add_condition = AddCondition::SAME_DATA);
+
+	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill);
 
 };
 
@@ -45,8 +50,9 @@ class InOrderTraversal : public ITraversalStrategy<T>
 {
 public:
 
-	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill,
-		const AddCondition& add_condition = AddCondition::SAME_DATA);
+	InOrderTraversal(const AddCondition& add_condition = AddCondition::SAME_DATA);
+
+	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill);
 
 };
 
@@ -55,39 +61,47 @@ class PostOrderTraversal : public ITraversalStrategy<T>
 {
 public:
 
-	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill,
-		const AddCondition& add_condition = AddCondition::SAME_DATA);
+	PostOrderTraversal(const AddCondition& add_condition = AddCondition::SAME_DATA);
+
+	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill);
 
 };
 
 template <typename T>
 class BFSTraversal : public ITraversalStrategy<T>
 {
+public:
+
+	BFSTraversal(const AddCondition& add_condition = AddCondition::SAME_DATA);
+
+	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill);
+
 private:
 
 	std::queue<TINode<T>*> queue;
 
-public:	
-
-	void search(TINode<T>* root, const T& data, std::vector<TINode<T>*>& vector_to_fill,
-		const AddCondition& add_condition = AddCondition::SAME_DATA);
-	
 };
 
 #include "INode.h"
 
+template <typename T>
+ITraversalStrategy<T>::ITraversalStrategy(const AddCondition& add_condition)
+:
+m_add_condition(add_condition)
+{
+}
+
 template<typename T>
 void ITraversalStrategy<T>::add(TINode<T>* root,
 								const T& data,
-								std::vector<TINode<T>*>& vector_to_fill,
-								const AddCondition& add_condition)
+								std::vector<TINode<T>*>& vector_to_fill)
 {
-	if (add_condition == AddCondition::SAME_DATA) {
+	if (m_add_condition == AddCondition::SAME_DATA) {
 		if (root->getData() == data) {
 			vector_to_fill.push_back(root);
 		}
 	}
-	else if (add_condition == AddCondition::NO_CONDITION) {
+	else if (m_add_condition == AddCondition::NO_CONDITION) {
 		vector_to_fill.push_back(root);
 	}
 	
@@ -98,31 +112,43 @@ void ITraversalStrategy<T>::traverse(TINode<T>* root, std::vector<TINode<T>*>& v
 {
 	// VERY BAD BUT WORKS
 	T* not_used = nullptr;
-	search(root, *not_used, vector_to_fill, AddCondition::NO_CONDITION);
+	search(root, *not_used, vector_to_fill);
+}
+
+template<typename T>
+PreOrderTraversal<T>::PreOrderTraversal(const AddCondition& add_condition)
+:
+ITraversalStrategy(add_condition)
+{
 }
 
 template<typename T>
 void PreOrderTraversal<T>::search(TINode<T>* root, 
 								  const T& data, 
-								  std::vector<TINode<T>*>& vector_to_fill,
-								  const AddCondition& add_condition)
+								  std::vector<TINode<T>*>& vector_to_fill)
 {
 	assert(root != nullptr);
 
-	this->add(root, data, vector_to_fill, add_condition);
+	this->add(root, data, vector_to_fill);
 
 	std::vector<TINode<T>*> sons = root->getSons();
 
 	for (auto& son : sons) {
-		search(son, data, vector_to_fill, add_condition);
+		search(son, data, vector_to_fill);
 	}
+}
+
+template<typename T>
+InOrderTraversal<T>::InOrderTraversal(const AddCondition& add_condition)
+:
+ITraversalStrategy(add_condition)
+{
 }
 
 template<typename T>
 void InOrderTraversal<T>::search(TINode<T>* root, 
 								 const T& data, 
-								 std::vector<TINode<T>*>& vector_to_fill,
-								 const AddCondition& add_condition)
+								 std::vector<TINode<T>*>& vector_to_fill)
 {
 	assert(root != nullptr);
 
@@ -130,43 +156,55 @@ void InOrderTraversal<T>::search(TINode<T>* root,
 
 	if (!sons.empty()) {
 		for (auto& son : sons) {
-			search(son, data, vector_to_fill, add_condition);
+			search(son, data, vector_to_fill);
 
-			this->add(root, data, vector_to_fill, add_condition);
+			this->add(root, data, vector_to_fill);
 		}
 	}
 	else {
-		this->add(root, data, vector_to_fill, add_condition);
+		this->add(root, data, vector_to_fill);
 	}
 	
 }
 
 template<typename T>
+PostOrderTraversal<T>::PostOrderTraversal(const AddCondition& add_condition)
+:
+ITraversalStrategy(add_condition)
+{
+}
+
+template<typename T>
 void PostOrderTraversal<T>::search(TINode<T>* root, 
 								   const T& data, 
-								   std::vector<TINode<T>*>& vector_to_fill,
-								   const AddCondition& add_condition)
+								   std::vector<TINode<T>*>& vector_to_fill)
 {
 	assert(root != nullptr);
 
 	std::vector<TINode<T>*> sons = root->getSons();
 
 	for (auto& son : sons) {
-		search(son, data, vector_to_fill, add_condition);
+		search(son, data, vector_to_fill);
 	}
 
-	this->add(root, data, vector_to_fill, add_condition);
+	this->add(root, data, vector_to_fill);
+}
+
+template<typename T>
+BFSTraversal<T>::BFSTraversal(const AddCondition& add_condition)
+:
+ITraversalStrategy(add_condition)
+{
 }
 
 template<typename T>
 void BFSTraversal<T>::search(TINode<T>* root, 
 							 const T& data, 
-							 std::vector<TINode<T>*>& vector_to_fill,
-							 const AddCondition& add_condition)
+							 std::vector<TINode<T>*>& vector_to_fill)
 {
 	assert(root != nullptr);
 
-	this->add(root, data, vector_to_fill, add_condition);
+	this->add(root, data, vector_to_fill);
 
 	std::vector<TINode<T>*> sons = root->getSons();
 
@@ -177,6 +215,6 @@ void BFSTraversal<T>::search(TINode<T>* root,
 	while (!queue.empty()) {
 		TINode<T>* first_in_queue = queue.front();
 		queue.pop();
-		search(first_in_queue, data, vector_to_fill, add_condition);
+		search(first_in_queue, data, vector_to_fill);
 	}
 }
