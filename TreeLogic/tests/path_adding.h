@@ -1,9 +1,7 @@
 #pragma once
 #include "Tree.h"
 #include "BinaryTree.h"
-#define IS_TRUE(x) { if (!(x)) {std::cout << __FUNCTION__ << " failed on line " << __LINE__ << "\n";}else{ std::cout << "Passed\n";} }
-#define TEST_WARNING { std::cout << "\t Expected warning: "; }
-#define TEST_ERROR { std::cout << "\t Expected error: "; }
+#include "test_macros.h"
 
 // Try to add child of root but no root
 bool regular_tree_path_adding_0()
@@ -174,12 +172,10 @@ bool binary_tree_path_adding_0()
 }
 
 
-void regular_tree_path_adding()
+void path_adding_tests()
 {
-	bool test = false;
-	std::cout << "Regular tree path adding tests: \n";
+	std::cout << "Path adding tests: \n\n";
 
-	
 	IS_TRUE(regular_tree_path_adding_0());
 	IS_TRUE(regular_tree_path_adding_1());
 	IS_TRUE(regular_tree_path_adding_2());
@@ -191,6 +187,8 @@ void regular_tree_path_adding()
 	IS_TRUE(regular_tree_path_adding_9());
 
 	IS_TRUE(binary_tree_path_adding_0());
+
+	std::cout << "Path adding tests finished\n\n";
 }
 
 

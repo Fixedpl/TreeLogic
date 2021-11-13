@@ -175,6 +175,8 @@
     <ClInclude Include="src\ITree.h" />
     <ClInclude Include="src\Tree.h" />
     <ClInclude Include="tests\path_adding.h" />
+    <ClInclude Include="tests\test_macros.h" />
+    <ClInclude Include="tests\tree_diameter.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\notes.txt" />

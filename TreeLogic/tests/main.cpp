@@ -1,12 +1,12 @@
 ﻿#include <iostream>
 #include "path_adding.h"
-
+#include "tree_diameter.h"
 
 
 int main()
 {
-    regular_tree_path_adding();
-    
+    path_adding_tests();
+    tree_diameter_tests();
 
     return 0;
 }

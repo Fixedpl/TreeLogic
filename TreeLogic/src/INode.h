@@ -32,6 +32,7 @@ public:
 	uint32_t getId();
 	void setId(const uint32_t& id);
 
+	bool hasFather() const;
 	INode* getFatherAbstract();
 	void setFather(INode* node);
 

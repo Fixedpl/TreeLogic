@@ -23,10 +23,20 @@ public:
 
 	INode* findNodeWithIDAbstract(const uint32_t& id, INode* starting_node, const int32_t& depth_limit = -1);
 
+	uint32_t getDiameter() const;
+
+	bool isEmpty() const;
+
 protected:
 
 	INode* _add(INode* to_add);
 	INode* _add(INode* to_add, const std::string& path);
+
+	void _remove(INode* node);
+
+	uint32_t recalculateTreeDiameter(INode* starting_node, const uint32_t& current_diameter = 0);
+
+	void potentialDiameter(const uint32_t& path_diameter);
 
 protected:
 
@@ -37,6 +47,8 @@ protected:
 	IAddingStrategy* m_current_adding_strategy = nullptr;
 
 	PrettyPrintTree m_tree_printer;
+
+	uint32_t m_tree_diameter;
 
 };
 

@@ -148,13 +148,13 @@ void PrettyPrintTree::print(INode* root_node)
 	*	it needs to reserve 2 * tree_diameter - 1 strings to be filled.
 	********************************************************************/
 
-	uint32_t tree_diameter = 2 * findDiameter(root_node) - 1;
-	std::string* tree_view_to_fill = new std::string[tree_diameter];
+	uint32_t tree_diameter_tests = 2 * findDiameter(root_node) - 1;
+	std::string* tree_view_to_fill = new std::string[tree_diameter_tests];
 
-	buildTreeSkeleton(root_node, tree_view_to_fill, tree_diameter);
-	fillMissingLines(tree_view_to_fill, tree_diameter);
+	buildTreeSkeleton(root_node, tree_view_to_fill, tree_diameter_tests);
+	fillMissingLines(tree_view_to_fill, tree_diameter_tests);
 
-	for (int i = 0; i < tree_diameter; ++i) {
+	for (int i = 0; i < tree_diameter_tests; ++i) {
 		std::cout << tree_view_to_fill[i] << std::endl;
 	}
 

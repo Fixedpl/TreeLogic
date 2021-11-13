@@ -25,9 +25,14 @@ void INode::setId(const uint32_t& id)
 }
 
 
+bool INode::hasFather() const
+{
+	return m_father != nullptr;
+}
+
 INode* INode::getFatherAbstract()
 {
-	return m_father;;
+	return m_father;
 }
 
 void INode::setFather(INode* node)

@@ -18,25 +18,15 @@ uint32_t first_number_to_int(const std::string& string, const uint32_t& starting
 }
 
 ITree::ITree()
+:
+m_tree_diameter(0)
 {
 }
 
 void ITree::remove(INode* node)
 {
-	m_id_handler.pushId(node->getId());
-
-	for (auto& son : node->getSonsAbstract()) {
-		remove(son);
-	}
-
-	if (node->getFatherAbstract() != nullptr) {
-		node->getFatherAbstract()->removeSonPtr(node);
-	}
-	else {
-		m_root_node = nullptr;
-	}
-
-	delete node;
+	_remove(node);
+	m_tree_diameter = recalculateTreeDiameter(m_root_node, 0);
 }
 
 
@@ -90,14 +80,26 @@ INode* ITree::findNodeWithIDAbstract(const uint32_t& id, INode* starting_node, c
 	return nullptr;
 }
 
+uint32_t ITree::getDiameter() const
+{
+	return m_tree_diameter;;
+}
+
+bool ITree::isEmpty() const
+{
+	return m_root_node == nullptr;
+}
+
 
 INode* ITree::_add(INode* to_add)
 {
 	if (m_root_node == nullptr) {
 		m_root_node = to_add;
+		m_tree_diameter = 1;
 	}
 	else {
-		m_current_adding_strategy->add(m_root_node, to_add);
+		uint32_t path_diameter = m_current_adding_strategy->add(m_root_node, to_add);
+		potentialDiameter(path_diameter);
 	}
 	return to_add;
 }
@@ -119,6 +121,7 @@ INode* ITree::_add(INode* to_add, const std::string& path)
 			std::cout << "[ERROR] TITree.h: Tree has no root but more than 1 nodes included in path. Abandoning insertion\n";
 			return nullptr;
 		}
+		m_tree_diameter = 1;
 		m_root_node = to_add;
 		return to_add;
 	}
@@ -134,6 +137,7 @@ INode* ITree::_add(INode* to_add, const std::string& path)
 		return nullptr;
 	}
 
+	uint32_t path_diameter = 0;
 	current_index++;
 	INode* current_node = m_root_node;
 	INode* previous_node = current_node;
@@ -147,18 +151,61 @@ INode* ITree::_add(INode* to_add, const std::string& path)
 			std::cout << "[ERROR] TITree.h: Couldn't find node with id " << number_from_string << ". Abandoning insertion\n";
 			return nullptr;
 		}
+		path_diameter++;
 		current_index++;
 	}
 	to_add->setId(number_from_string);
 	if (current_node) {
 		std::cout << "[WARNING] TITree.h: TNode with this id already exists. TNode was overwritten\n";
 		previous_node->swapSonPtrs(current_node, to_add);
+		potentialDiameter(path_diameter);
 		delete current_node;
 	}
 	else {
 		if (!previous_node->addSonPtr(to_add)) {
 			return nullptr;
 		}
+		potentialDiameter(path_diameter + 1);
 	}
 	return to_add;
+}
+
+void ITree::_remove(INode* node)
+{
+	m_id_handler.pushId(node->getId());
+
+	for (auto& son : node->getSonsAbstract()) {
+		remove(son);
+	}
+
+	if (node->getFatherAbstract() != nullptr) {
+		node->getFatherAbstract()->removeSonPtr(node);
+	}
+	else {
+		m_root_node = nullptr;
+	}
+
+	delete node;
+}
+
+uint32_t ITree::recalculateTreeDiameter(INode* starting_node, const uint32_t& current_diameter)
+{
+	if (!starting_node) {
+		return current_diameter;
+	}
+	uint32_t highest_diameter = current_diameter + 1;
+	for (const auto& son : starting_node->getSonsAbstract()) {
+		uint32_t diameter = recalculateTreeDiameter(son, current_diameter + 1);
+		if (diameter > highest_diameter) {
+			highest_diameter = diameter;
+		}
+	}
+	return highest_diameter;
+}
+
+void ITree::potentialDiameter(const uint32_t& path_diameter)
+{
+	if (path_diameter > m_tree_diameter) {
+		m_tree_diameter = path_diameter;
+	}
 }

@@ -19,7 +19,7 @@ class IAddingStrategy
 {
 public:
 
-	virtual void add(INode* root, INode* to_add) = 0;
+	virtual uint32_t add(INode* root, INode* to_add, const uint32_t& path_diameter = 1) = 0;
 
 };
 
@@ -36,7 +36,7 @@ private:
 
 public:
 
-	void add(INode* root, INode* to_add);
+	uint32_t add(INode* root, INode* to_add, const uint32_t& path_diameter = 1);
 
 private:
 
@@ -64,7 +64,7 @@ private:
 
 public:
 
-	void add(INode* root, INode* to_add);
+	uint32_t add(INode* root, INode* to_add, const uint32_t& path_diameter = 1);
 
 public:
 
